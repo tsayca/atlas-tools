@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Atlas - AI & Dev Tools</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="src/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+    <div class="app-container">
+        <header>
+            <div class="brand">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" class="logo">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+                ATLAS
+            </div>
+            <button id="add-tool-btn" class="btn-primary">+ Submit Tool</button>
+        </header>
+
+        <div class="hero">
+            <h1>The definitive collection<br>of AI & Dev tools.</h1>
+            <p>A curated directory of the most powerful resources designed to accelerate your workflow.</p>
+
+            <div class="action-bar justify-center">
+                <!-- Categories -->
+                <div id="category-scroller" class="categories">
+                    <!-- Injected via JS -->
+                </div>
+            </div>
+        </div>
+
+        <main id="tools-grid" class="grid">
+            <!-- Cards Injected via JS -->
+        </main>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal-overlay" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modal-title">submit a tool</h2>
+            </div>
+            <form id="tool-form">
+                <input type="hidden" id="tool-id" name="id"> <!-- Hidden ID for edits -->
+
+                <div class="form-field">
+                    <label>Name</label>
+                    <input type="text" name="title" id="inp-title" required placeholder="e.g. Vercel">
+                </div>
+
+                <div class="form-field">
+                    <label>Category</label>
+                    <select name="category" id="inp-category" required>
+                        <!-- Injected -->
+                    </select>
+                </div>
+
+                <div class="form-field">
+                    <label>Website URL</label>
+                    <input type="url" name="url" id="inp-url" required placeholder="https://...">
+                </div>
+
+                <div class="form-field">
+                    <label>Description</label>
+                    <textarea name="description" id="inp-desc" rows="3" required
+                        placeholder="What does it do?"></textarea>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" id="close-modal-btn" class="chip">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Tool</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="src/main.js"></script>
+</body>
+
+</html>
