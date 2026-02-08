@@ -50,22 +50,31 @@
 
     // --- Data Handling (Supabase) ---
     async function loadData() {
-        if (!supabase) return;
+        if (!supabase) {
+            alert("ERREUR : Supabase SDK non chargé !");
+            return;
+        }
+
+        console.log("Loading data from Supabase...");
 
         // Fetch data from 'tools' table
-        const { data, error } = await supabase
+        const { data, error, count } = await supabase
             .from('tools')
-            .select('*')
+            .select('*', { count: 'exact' })
             .order('created_at', { ascending: false });
 
         if (error) {
             console.error("Error loading tools:", error);
+            alert("ERREUR SUPABASE : " + error.message + "\n\nVérifiez que la table 'tools' existe bien dans votre base de données !");
             return;
         }
+
+        console.log("Data received:", data);
 
         if (data && data.length > 0) {
             state.tools = data;
         } else {
+            console.log("No data found. Attempting to seed...");
             // First run? Seed database if empty
             await seedSupabase();
         }
