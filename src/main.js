@@ -258,7 +258,10 @@
                     </div>
                 </div>
                 
-                <h3 class="card-title">${tool.title}</h3>
+                <div class="card-identity">
+                    <img src="https://www.google.com/s2/favicons?domain=${tool.url}&sz=64" alt="${tool.title}" class="tool-logo" onerror="this.style.display='none'">
+                    <h3 class="card-title">${tool.title}</h3>
+                </div>
                 <p class="card-desc">${tool.description}</p>
                 
                 <div class="card-footer">
