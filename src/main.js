@@ -36,6 +36,7 @@
         inpTitle: document.getElementById('inp-title'),
         inpCategory: document.getElementById('inp-category'),
         inpUrl: document.getElementById('inp-url'),
+        inpLogo: document.getElementById('inp-logo'),
         inpDesc: document.getElementById('inp-desc')
     };
 
@@ -238,10 +239,16 @@
             return;
         }
 
-        elements.grid.innerHTML = filtered.map(tool => `
+        elements.grid.innerHTML = filtered.map(tool => {
+            // Logic for logo: Custom URL > Favicon > Fallback (hidden)
+            const logoSrc = tool.logo_url && tool.logo_url.trim() !== ''
+                ? tool.logo_url
+                : `https://www.google.com/s2/favicons?domain=${tool.url}&sz=64`;
+
+            return `
             <article class="card">
                 <div class="card-header">
-                    <span class="tag" style="background:${getCategoryColor(tool.category)}">${tool.category}</span>
+                    <span class="tag" style="${getCategoryColor(tool.category)}">${tool.category}</span>
                     <div class="card-actions">
                         <button class="icon-btn" onclick="window.app.edit('${tool.id}')" title="Edit">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -259,7 +266,7 @@
                 </div>
                 
                 <div class="card-identity">
-                    <img src="https://www.google.com/s2/favicons?domain=${tool.url}&sz=64" alt="${tool.title}" class="tool-logo" onerror="this.style.display='none'">
+                    <img src="${logoSrc}" alt="${tool.title}" class="tool-logo" onerror="this.src='https://via.placeholder.com/32?text=?'">
                     <h3 class="card-title">${tool.title}</h3>
                 </div>
                 <p class="card-desc">${tool.description}</p>
@@ -275,7 +282,7 @@
                     </a>
                 </div>
             </article>
-        `).join('');
+        `}).join('');
     }
 
     function getCategoryColor(cat) {
@@ -304,6 +311,7 @@
                 elements.inpTitle.value = tool.title;
                 elements.inpCategory.value = tool.category;
                 elements.inpUrl.value = tool.url;
+                if (elements.inpLogo) elements.inpLogo.value = tool.logo_url || '';
                 elements.inpDesc.value = tool.description;
             }
         } else {
@@ -351,6 +359,7 @@
                 title: formData.get('title'),
                 category: formData.get('category'),
                 url: formData.get('url'),
+                logo_url: formData.get('logo_url'), // New field
                 description: formData.get('description')
             };
 

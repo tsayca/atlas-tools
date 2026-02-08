@@ -449,8 +449,15 @@ header {
         grid-template-columns: 1fr;
     }
 
-    padding: 20px;
+    .app-container {
+        padding: 20px;
+    }
 }
+
+.form-field select {
+    padding-right: 48px;
+    /* More space for the arrow */
+    cursor: pointer;
 }
 
 /* Card Identity (Logo + Title) */
