@@ -66,21 +66,83 @@
         if (data && data.length > 0) {
             state.tools = data;
         } else {
-            // First run? Seed database if empty? 
-            // Optional: You could uncomment this to auto-seed Supabase
-            // seedSupabase(); 
-            state.tools = [];
+            // First run? Seed database if empty
+            await seedSupabase();
         }
     }
 
-    // Optional: Helper to seed Supabase once
-    /*
+    // Helper to seed Supabase once
     async function seedSupabase() {
-        const initialTools = [ ... ]; // Your list here
+        console.log("Seeding Database...");
+        const initialTools = [
+            // AI
+            { id: crypto.randomUUID(), title: 'ChatGPT', description: 'Advanced AI language model for conversation and coding.', url: 'https://chat.openai.com', category: 'AI' },
+            { id: crypto.randomUUID(), title: 'Claude', description: 'Next-generation AI assistant with large context window.', url: 'https://claude.ai', category: 'AI' },
+            { id: crypto.randomUUID(), title: 'Gemini', description: 'Google’s most capable and general AI model.', url: 'https://deepmind.google/technologies/gemini/', category: 'AI' },
+            { id: crypto.randomUUID(), title: 'Midjourney', description: 'Generative AI for creating stunning photorealistic images.', url: 'https://midjourney.com', category: 'AI' },
+            { id: crypto.randomUUID(), title: 'Perplexity', description: 'AI-powered answer engine with real-time web search.', url: 'https://perplexity.ai', category: 'AI' },
+            { id: crypto.randomUUID(), title: 'Runway', description: 'AI tools for filmmaking, video editing, and content creation.', url: 'https://runwayml.com', category: 'AI' },
+            { id: crypto.randomUUID(), title: 'ElevenLabs', description: 'The most realistic AI audio and speech generation.', url: 'https://elevenlabs.io', category: 'AI' },
+            { id: crypto.randomUUID(), title: 'Suno', description: 'Make any song in any style with AI.', url: 'https://suno.com', category: 'AI' },
+            { id: crypto.randomUUID(), title: 'Lovable', description: 'AI-powered tool to turn ideas into apps.', url: 'https://lovable.dev', category: 'AI' },
+            { id: crypto.randomUUID(), title: 'Bolt', description: 'AI web development agent.', url: 'https://bolt.new', category: 'AI' },
+
+            // Design
+            { id: crypto.randomUUID(), title: 'Figma', description: 'Collaborative interface design tool.', url: 'https://figma.com', category: 'Design' },
+            { id: crypto.randomUUID(), title: 'Spline', description: 'Design and collaborate in 3D directly in the browser.', url: 'https://spline.design', category: 'Design' },
+            { id: crypto.randomUUID(), title: 'Rive', description: 'Build interactive animations that run anywhere.', url: 'https://rive.app', category: 'Design' },
+            { id: crypto.randomUUID(), title: 'Linear', description: 'A better way to build products. Issue tracking built for speed.', url: 'https://linear.app', category: 'Design' },
+            { id: crypto.randomUUID(), title: 'Framer', description: 'Design and publish your dream site. Zero code.', url: 'https://framer.com', category: 'Design' },
+            { id: crypto.randomUUID(), title: 'Webflow', description: 'Build with the power of code — without writing any.', url: 'https://webflow.com', category: 'Design' },
+            { id: crypto.randomUUID(), title: 'Lummi', description: 'Free AI-generated stock photos and royalty-free images.', url: 'https://www.lummi.ai', category: 'Design' },
+            { id: crypto.randomUUID(), title: 'Canva', description: 'Free design tool: presentations, video, social media.', url: 'https://canva.com', category: 'Design' },
+            { id: crypto.randomUUID(), title: 'DesignJoy', description: 'Design implementation as a subscription service.', url: 'https://designjoy.co', category: 'Design' },
+
+            // Development
+            { id: crypto.randomUUID(), title: 'Vercel', description: 'Develop. Preview. Ship. The frontend cloud.', url: 'https://vercel.com', category: 'Development' },
+            { id: crypto.randomUUID(), title: 'Supabase', description: 'The open source Firebase alternative.', url: 'https://supabase.com', category: 'Development' },
+            { id: crypto.randomUUID(), title: 'Cursor', description: 'The AI-first code editor built for speed.', url: 'https://cursor.sh', category: 'Development' },
+            { id: crypto.randomUUID(), title: 'Resend', description: 'Email for developers. The best API to reach humans.', url: 'https://resend.com', category: 'Development' },
+            { id: crypto.randomUUID(), title: 'Replit', description: 'Collaborative browser-based IDE.', url: 'https://replit.com', category: 'Development' },
+            { id: crypto.randomUUID(), title: 'Railway', description: 'Instant deployments for any project.', url: 'https://railway.app', category: 'Development' },
+            { id: crypto.randomUUID(), title: 'Turso', description: 'The Edge Database based on libSQL.', url: 'https://turso.tech', category: 'Development' },
+            { id: crypto.randomUUID(), title: 'Firecrawl', description: 'Turn websites into LLM-ready data.', url: 'https://firecrawl.dev', category: 'Development' },
+            { id: crypto.randomUUID(), title: '21st.dev', description: 'The npm for design engineers. UI Library.', url: 'https://21st.dev', category: 'Development' },
+            { id: crypto.randomUUID(), title: 'Baseten', description: 'The fastest way to run machine learning models.', url: 'https://www.baseten.co', category: 'Development' },
+            { id: crypto.randomUUID(), title: 'CloudCode', description: 'Cloud IDE and development environment.', url: 'https://cloudcode.google', category: 'Development' },
+
+            // SaaS & Payments
+            { id: crypto.randomUUID(), title: 'Stripe', description: 'Financial infrastructure for the internet.', url: 'https://stripe.com', category: 'Payments' },
+            { id: crypto.randomUUID(), title: 'Lemon Squeezy', description: 'Payments, tax, and subscriptions for SaaS.', url: 'https://lemonsqueezy.com', category: 'Payments' },
+            { id: crypto.randomUUID(), title: 'Typeform', description: 'People-friendly forms and surveys.', url: 'https://typeform.com', category: 'SaaS' },
+            { id: crypto.randomUUID(), title: 'Notion', description: 'The all-in-one workspace for notes and docs.', url: 'https://notion.so', category: 'SaaS' },
+            { id: crypto.randomUUID(), title: 'Airtable', description: 'The platform for building collaborative apps.', url: 'https://airtable.com', category: 'SaaS' },
+            { id: crypto.randomUUID(), title: 'Vault', description: 'Secure secrets management for teams.', url: 'https://hashicorp.com/products/vault', category: 'SaaS' },
+
+            // Automation
+            { id: crypto.randomUUID(), title: 'Zapier', description: 'Automate your workflows by connecting apps.', url: 'https://zapier.com', category: 'Automation' },
+            { id: crypto.randomUUID(), title: 'Make', description: 'Visual platform to design and build workflows.', url: 'https://make.com', category: 'Automation' },
+            { id: crypto.randomUUID(), title: 'n8n', description: 'Workflow automation for technical people.', url: 'https://n8n.io', category: 'Automation' },
+
+            // Inspiration
+            { id: crypto.randomUUID(), title: 'Mobbin', description: 'Discover the latest mobile design patterns.', url: 'https://mobbin.com', category: 'Inspiration' },
+            { id: crypto.randomUUID(), title: 'Godly', description: 'Astronomically good web design inspiration.', url: 'https://godly.website', category: 'Inspiration' },
+            { id: crypto.randomUUID(), title: 'Awwwards', description: 'The awards for design, creativity and innovation.', url: 'https://awwwards.com', category: 'Inspiration' },
+            { id: crypto.randomUUID(), title: 'Dribbble', description: 'The world’s leading destination for design.', url: 'https://dribbble.com', category: 'Inspiration' },
+            { id: crypto.randomUUID(), title: 'View Source', description: 'Curated collection of the best websites.', url: 'https://viewsource.com', category: 'Inspiration' }
+        ];
+
+        // Insert in batches to avoid payload limits if necessary, though 50 is fine.
         const { error } = await supabase.from('tools').insert(initialTools);
-        if(!error) loadData();
+
+        if (!error) {
+            console.log("Database seeded successfully!");
+            state.tools = initialTools; // Update local state immediately
+            renderGrid();
+        } else {
+            console.error("Error seeding tools:", error);
+        }
     }
-    */
 
     // --- CRUD Operations ---
 
@@ -181,7 +243,7 @@
                         <button class="icon-btn delete" onclick="window.app.delete('${tool.id}')" title="Delete">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="3 6 5 6 21 6"></polyline>
-                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2-2h4"></path>
                             </svg>
                         </button>
                     </div>
