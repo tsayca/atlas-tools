@@ -1,390 +1,721 @@
-// src/main.js
 (function () {
-    // --- SUPABASE CONFIGURATION ---
-    // ⚠️ IMPORTANT: REPLACE THESE WITH YOUR OWN SUPABASE PROJECT DETAILS
-    const SUPABASE_URL = 'https://ppotwdhgdmxnbhtkuuya.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBwb3R3ZGhnZG14bmJodGt1dXlhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA1NjU0MzIsImV4cCI6MjA4NjE0MTQzMn0.IiHHRqwn8ksRLTblxpsRvZEjrWvKYTxY9uHvTausjk0';
+    // --- Data: All Apps ---
+    const generateId = () => Math.random().toString(36).substr(2, 9);
 
-    // Initialize Client
-    let supabase = null;
-    if (window.supabase) {
-        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    } else {
-        console.error("Supabase SDK not loaded");
-    }
+    const allApps = [
+        // 1. Intelligence Artificielle
+        {
+            category: "Intelligence Artificielle",
+            displayCategory: "Intelligence Artificielle",
+            parentFilter: "Development",
+            icon: "brain-circuit",
+            color: "text-purple-500",
+            apps: [
+                { id: generateId(), title: "Gemini Pro", desc: "Multimodal AI", url: "https://deepmind.google/technologies/gemini/", isFavorite: true },
+                { id: generateId(), title: "ChatGPT", desc: "Conversational AI", url: "https://chat.openai.com", isFavorite: true },
+                { id: generateId(), title: "Claude 3", desc: "Anthropic AI", url: "https://anthropic.com" },
+                { id: generateId(), title: "Midjourney", desc: "Image Gen", url: "https://midjourney.com" }
+            ]
+        },
+        // 2. Development & Code
+        {
+            category: "Development",
+            displayCategory: "Development & Code",
+            parentFilter: "Development",
+            icon: "code-2",
+            color: "text-blue-500",
+            apps: [
+                { id: generateId(), title: "GitHub", desc: "Code Hosting", url: "https://github.com", isFavorite: true },
+                { id: generateId(), title: "Vercel", desc: "Deployment", url: "https://vercel.com" },
+                { id: generateId(), title: "Netlify", desc: "Web Hosting", url: "https://netlify.com" },
+                { id: generateId(), title: "VS Code", desc: "Editor", url: "https://code.visualstudio.com" },
+                { id: generateId(), title: "Stack Overflow", desc: "Q&A", url: "https://stackoverflow.com" },
+                { id: generateId(), title: "Supabase", desc: "Backend", url: "https://supabase.com" }
+            ]
+        },
+        // 3. Design & Creative
+        {
+            category: "Design",
+            displayCategory: "Design & Creative",
+            parentFilter: "Development",
+            icon: "pen-tool",
+            color: "text-pink-500",
+            apps: [
+                { id: generateId(), title: "Figma", desc: "UI Design", url: "https://figma.com" },
+                { id: generateId(), title: "Dribbble", desc: "Inspiration", url: "https://dribbble.com" },
+                { id: generateId(), title: "Behance", desc: "Portfolio", url: "https://behance.net" },
+                { id: generateId(), title: "Sketch", desc: "Mac Design", url: "https://sketch.com" },
+                { id: generateId(), title: "Pinterest", desc: "Ideas", url: "https://pinterest.com" }
+            ]
+        },
+        // 4. Divertissement
+        {
+            category: "Divertissement",
+            displayCategory: "Divertissement",
+            parentFilter: "Divertissement",
+            icon: "gamepad-2",
+            color: "text-green-500",
+            apps: [
+                { id: generateId(), title: "Netflix", desc: "Streaming", url: "https://netflix.com" },
+                { id: generateId(), title: "Spotify", desc: "Music", url: "https://open.spotify.com" },
+                { id: generateId(), title: "YouTube", desc: "Video", url: "https://youtube.com" },
+                { id: generateId(), title: "Twitch", desc: "Live Stream", url: "https://twitch.tv" },
+                { id: generateId(), title: "Steam", desc: "Games", url: "https://store.steampowered.com" }
+            ]
+        },
+        // 5. Banque / Finance
+        {
+            category: "Finance & Banque",
+            displayCategory: "Finance & Banque",
+            parentFilter: "SaaS & Productivité",
+            icon: "wallet",
+            color: "text-amber-500",
+            apps: [
+                { id: generateId(), title: "Revolut", desc: "Banking", url: "https://revolut.com" },
+                { id: generateId(), title: "PayPal", desc: "Payments", url: "https://paypal.com" },
+                { id: generateId(), title: "Stripe", desc: "Payments API", url: "https://stripe.com" }
+            ]
+        },
+        // 6. SaaS & Productivité
+        {
+            category: "SaaS & Productivité",
+            displayCategory: "SaaS & Productivité",
+            parentFilter: "SaaS & Productivité",
+            icon: "briefcase",
+            color: "text-indigo-500",
+            apps: [
+                { id: generateId(), title: "Notion", desc: "Workspace", url: "https://notion.so" },
+                { id: generateId(), title: "Linear", desc: "Issues", url: "https://linear.app" },
+                { id: generateId(), title: "Slack", desc: "Chat", url: "https://slack.com" },
+                { id: generateId(), title: "Google Drive", desc: "Cloud", url: "https://drive.google.com" },
+                { id: generateId(), title: "Gmail", desc: "Email", url: "https://gmail.com" }
+            ]
+        },
+        // 7. Veille Tech / Réseaux
+        {
+            category: "Veille & Social",
+            displayCategory: "Veille & Social",
+            parentFilter: "all",
+            icon: "rss",
+            color: "text-orange-500",
+            apps: [
+                { id: generateId(), title: "Twitter/X", desc: "Social", url: "https://twitter.com" },
+                { id: generateId(), title: "LinkedIn", desc: "Network", url: "https://linkedin.com" },
+                { id: generateId(), title: "Product Hunt", desc: "New Tools", url: "https://producthunt.com" },
+                { id: generateId(), title: "Hacker News", desc: "Tech News", url: "https://news.ycombinator.com" },
+                { id: generateId(), title: "TechCrunch", desc: "News", url: "https://techcrunch.com" }
+            ]
+        }
+    ];
 
-    // State
+
+    // Mega-categories mapping
+    const megaCategories = [
+        {
+            name: "Admin",
+            title: "Administration",
+            subtitle: "SaaS & Productivité",
+            icon: "briefcase",
+            color: "text-indigo-500",
+            includes: ["SaaS & Productivité", "Finance & Banque"]
+        },
+        {
+            name: "Divertissement",
+            title: "Divertissement",
+            subtitle: "Films, Musique & Gaming",
+            icon: "gamepad-2",
+            color: "text-pink-500",
+            includes: ["Divertissement"]
+        },
+        {
+            name: "Dev/Tools",
+            title: "Dev / Tools",
+            subtitle: "Outils de développement",
+            icon: "code-2",
+            color: "text-blue-500",
+            includes: ["Development"]
+        },
+        {
+            name: "Google",
+            title: "Google",
+            subtitle: "Services Google",
+            icon: "globe",
+            color: "text-red-500",
+            includes: ["SaaS & Productivité"] // Will filter for Google apps
+        },
+        {
+            name: "Design",
+            title: "Design",
+            subtitle: "Créativité & UI/UX",
+            icon: "palette",
+            color: "text-purple-500",
+            includes: ["Design"]
+        },
+        {
+            name: "AI",
+            title: "AI",
+            subtitle: "Intelligence Artificielle",
+            icon: "brain",
+            color: "text-emerald-500",
+            includes: ["Intelligence Artificielle"]
+        }
+    ];
+
+    // State management
     const state = {
-        tools: [],
-        categories: [
-            'All', 'AI', 'Design', 'Development', 'SaaS', 'Payments', 'Automation', 'Inspiration', 'Utilities'
-        ],
-        activeCategory: 'All',
-        editingId: null
+        activeFilter: 'all',
+        editingAppId: null,
+        readLater: [
+            { id: '1', title: 'The Future of AI in 2026', url: 'https://www.google.com/search?q=future+of+ai+2026' },
+            { id: '2', title: 'Tailwind CSS v4 Features', url: 'https://tailwindcss.com' },
+            { id: '3', title: 'React Server Components Guide', url: 'https://react.dev' }
+        ]
     };
 
-    // DOM Elements
     const elements = {
-        grid: document.getElementById('tools-grid'),
-        categoryScroller: document.getElementById('category-scroller'),
-        addBtn: document.getElementById('add-tool-btn'),
-        modalOverlay: document.getElementById('modal-overlay'),
-        modalTitle: document.getElementById('modal-title'),
+        readLaterList: document.getElementById('read-later-list'),
+        addReadLaterBtn: document.getElementById('add-read-later-btn'),
+        allAppsContainer: document.getElementById('all-apps-container'),
+        sidebarLinks: document.querySelectorAll('.sidebar-link'),
+
+        sidebarAppList: document.getElementById('sidebar-app-list'),
+        sidebarFavoritesList: document.getElementById('sidebar-favorites-list'),
+        heroAppsContainer: document.getElementById('hero-apps-container'),
+
+        modal: document.getElementById('add-app-modal'),
+        openModalBtn: document.getElementById('add-app-sidebar-btn'),
         closeModalBtn: document.getElementById('close-modal-btn'),
-        form: document.getElementById('tool-form'),
-        inpId: document.getElementById('tool-id'),
-        inpTitle: document.getElementById('inp-title'),
-        inpCategory: document.getElementById('inp-category'),
-        inpUrl: document.getElementById('inp-url'),
-        inpLogo: document.getElementById('inp-logo'),
-        inpDesc: document.getElementById('inp-desc')
+        addAppForm: document.getElementById('add-app-form'),
+        modalTitle: document.querySelector('#add-app-modal h3'),
+        modalSubmitBtn: document.querySelector('#add-app-form button[type="submit"]'),
+
+        pasteArea: document.getElementById('paste-area'),
+        pastePreview: document.getElementById('paste-preview'),
+        iconUrlInput: document.getElementById('app-icon-url')
     };
 
-    // --- Initialization ---
-    async function init() {
-        await loadData(); // Now async
-        renderCategories();
-        renderCategoryOptions();
-        renderGrid();
+    function init() {
+        renderReadLater();
+        renderSidebarLists();
+        renderAllApps();
+        renderHeroFavorites();
         attachEventListeners();
+        if (window.lucide) window.lucide.createIcons();
     }
 
-    // --- Data Handling (Supabase) ---
-    async function loadData() {
-        if (!supabase) {
-            alert("ERREUR : Supabase SDK non chargé !");
+    function getFavicon(app) {
+        if (app.customIcon) return app.customIcon;
+        try {
+            const domain = new URL(app.url).hostname;
+            return `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
+        } catch (e) {
+            return `https://www.google.com/s2/favicons?domain=google.com&sz=128`;
+        }
+    }
+
+    function renderHeroFavorites() {
+        if (!elements.heroAppsContainer) return;
+
+        let favorites = [];
+        allApps.forEach(group => {
+            group.apps.forEach(app => {
+                if (app.isFavorite) favorites.push(app);
+            });
+        });
+
+        const top3 = favorites.slice(0, 3);
+
+        if (top3.length === 0) {
+            elements.heroAppsContainer.innerHTML = `<div class="col-span-3 text-center text-white/50 italic py-10">Ajoutez des favoris pour les voir ici !</div>`;
             return;
         }
 
-        console.log("Loading data from Supabase...");
-
-        // Fetch data from 'tools' table
-        const { data, error, count } = await supabase
-            .from('tools')
-            .select('*', { count: 'exact' })
-            .order('created_at', { ascending: false });
-
-        if (error) {
-            console.error("Error loading tools:", error);
-            alert("ERREUR SUPABASE : " + error.message + "\n\nVérifiez que la table 'tools' existe bien dans votre base de données !");
-            return;
-        }
-
-        console.log("Data received:", data);
-
-        if (data && data.length > 0) {
-            state.tools = data;
-        } else {
-            console.log("No data found. Attempting to seed...");
-            // First run? Seed database if empty
-            await seedSupabase();
-        }
-    }
-
-    // Helper to seed Supabase once
-    async function seedSupabase() {
-        console.log("Seeding Database...");
-        const initialTools = [
-            // AI
-            { id: crypto.randomUUID(), title: 'ChatGPT', description: 'Advanced AI language model for conversation and coding.', url: 'https://chat.openai.com', category: 'AI' },
-            { id: crypto.randomUUID(), title: 'Claude', description: 'Next-generation AI assistant with large context window.', url: 'https://claude.ai', category: 'AI' },
-            { id: crypto.randomUUID(), title: 'Gemini', description: 'Google’s most capable and general AI model.', url: 'https://deepmind.google/technologies/gemini/', category: 'AI' },
-            { id: crypto.randomUUID(), title: 'Midjourney', description: 'Generative AI for creating stunning photorealistic images.', url: 'https://midjourney.com', category: 'AI' },
-            { id: crypto.randomUUID(), title: 'Perplexity', description: 'AI-powered answer engine with real-time web search.', url: 'https://perplexity.ai', category: 'AI' },
-            { id: crypto.randomUUID(), title: 'Runway', description: 'AI tools for filmmaking, video editing, and content creation.', url: 'https://runwayml.com', category: 'AI' },
-            { id: crypto.randomUUID(), title: 'ElevenLabs', description: 'The most realistic AI audio and speech generation.', url: 'https://elevenlabs.io', category: 'AI' },
-            { id: crypto.randomUUID(), title: 'Suno', description: 'Make any song in any style with AI.', url: 'https://suno.com', category: 'AI' },
-            { id: crypto.randomUUID(), title: 'Lovable', description: 'AI-powered tool to turn ideas into apps.', url: 'https://lovable.dev', category: 'AI' },
-            { id: crypto.randomUUID(), title: 'Bolt', description: 'AI web development agent.', url: 'https://bolt.new', category: 'AI' },
-
-            // Design
-            { id: crypto.randomUUID(), title: 'Figma', description: 'Collaborative interface design tool.', url: 'https://figma.com', category: 'Design' },
-            { id: crypto.randomUUID(), title: 'Spline', description: 'Design and collaborate in 3D directly in the browser.', url: 'https://spline.design', category: 'Design' },
-            { id: crypto.randomUUID(), title: 'Rive', description: 'Build interactive animations that run anywhere.', url: 'https://rive.app', category: 'Design' },
-            { id: crypto.randomUUID(), title: 'Linear', description: 'A better way to build products. Issue tracking built for speed.', url: 'https://linear.app', category: 'Design' },
-            { id: crypto.randomUUID(), title: 'Framer', description: 'Design and publish your dream site. Zero code.', url: 'https://framer.com', category: 'Design' },
-            { id: crypto.randomUUID(), title: 'Webflow', description: 'Build with the power of code — without writing any.', url: 'https://webflow.com', category: 'Design' },
-            { id: crypto.randomUUID(), title: 'Lummi', description: 'Free AI-generated stock photos and royalty-free images.', url: 'https://www.lummi.ai', category: 'Design' },
-            { id: crypto.randomUUID(), title: 'Canva', description: 'Free design tool: presentations, video, social media.', url: 'https://canva.com', category: 'Design' },
-            { id: crypto.randomUUID(), title: 'DesignJoy', description: 'Design implementation as a subscription service.', url: 'https://designjoy.co', category: 'Design' },
-
-            // Development
-            { id: crypto.randomUUID(), title: 'Vercel', description: 'Develop. Preview. Ship. The frontend cloud.', url: 'https://vercel.com', category: 'Development' },
-            { id: crypto.randomUUID(), title: 'Supabase', description: 'The open source Firebase alternative.', url: 'https://supabase.com', category: 'Development' },
-            { id: crypto.randomUUID(), title: 'Cursor', description: 'The AI-first code editor built for speed.', url: 'https://cursor.sh', category: 'Development' },
-            { id: crypto.randomUUID(), title: 'Resend', description: 'Email for developers. The best API to reach humans.', url: 'https://resend.com', category: 'Development' },
-            { id: crypto.randomUUID(), title: 'Replit', description: 'Collaborative browser-based IDE.', url: 'https://replit.com', category: 'Development' },
-            { id: crypto.randomUUID(), title: 'Railway', description: 'Instant deployments for any project.', url: 'https://railway.app', category: 'Development' },
-            { id: crypto.randomUUID(), title: 'Turso', description: 'The Edge Database based on libSQL.', url: 'https://turso.tech', category: 'Development' },
-            { id: crypto.randomUUID(), title: 'Firecrawl', description: 'Turn websites into LLM-ready data.', url: 'https://firecrawl.dev', category: 'Development' },
-            { id: crypto.randomUUID(), title: '21st.dev', description: 'The npm for design engineers. UI Library.', url: 'https://21st.dev', category: 'Development' },
-            { id: crypto.randomUUID(), title: 'Baseten', description: 'The fastest way to run machine learning models.', url: 'https://www.baseten.co', category: 'Development' },
-            { id: crypto.randomUUID(), title: 'CloudCode', description: 'Cloud IDE and development environment.', url: 'https://cloudcode.google', category: 'Development' },
-
-            // SaaS & Payments
-            { id: crypto.randomUUID(), title: 'Stripe', description: 'Financial infrastructure for the internet.', url: 'https://stripe.com', category: 'Payments' },
-            { id: crypto.randomUUID(), title: 'Lemon Squeezy', description: 'Payments, tax, and subscriptions for SaaS.', url: 'https://lemonsqueezy.com', category: 'Payments' },
-            { id: crypto.randomUUID(), title: 'Typeform', description: 'People-friendly forms and surveys.', url: 'https://typeform.com', category: 'SaaS' },
-            { id: crypto.randomUUID(), title: 'Notion', description: 'The all-in-one workspace for notes and docs.', url: 'https://notion.so', category: 'SaaS' },
-            { id: crypto.randomUUID(), title: 'Airtable', description: 'The platform for building collaborative apps.', url: 'https://airtable.com', category: 'SaaS' },
-            { id: crypto.randomUUID(), title: 'Vault', description: 'Secure secrets management for teams.', url: 'https://hashicorp.com/products/vault', category: 'SaaS' },
-
-            // Automation
-            { id: crypto.randomUUID(), title: 'Zapier', description: 'Automate your workflows by connecting apps.', url: 'https://zapier.com', category: 'Automation' },
-            { id: crypto.randomUUID(), title: 'Make', description: 'Visual platform to design and build workflows.', url: 'https://make.com', category: 'Automation' },
-            { id: crypto.randomUUID(), title: 'n8n', description: 'Workflow automation for technical people.', url: 'https://n8n.io', category: 'Automation' },
-
-            // Inspiration
-            { id: crypto.randomUUID(), title: 'Mobbin', description: 'Discover the latest mobile design patterns.', url: 'https://mobbin.com', category: 'Inspiration' },
-            { id: crypto.randomUUID(), title: 'Godly', description: 'Astronomically good web design inspiration.', url: 'https://godly.website', category: 'Inspiration' },
-            { id: crypto.randomUUID(), title: 'Awwwards', description: 'The awards for design, creativity and innovation.', url: 'https://awwwards.com', category: 'Inspiration' },
-            { id: crypto.randomUUID(), title: 'Dribbble', description: 'The world’s leading destination for design.', url: 'https://dribbble.com', category: 'Inspiration' },
-            { id: crypto.randomUUID(), title: 'View Source', description: 'Curated collection of the best websites.', url: 'https://viewsource.com', category: 'Inspiration' }
-        ];
-
-        // Insert in batches to avoid payload limits if necessary, though 50 is fine.
-        const { error } = await supabase.from('tools').insert(initialTools);
-
-        if (!error) {
-            console.log("Database seeded successfully!");
-            state.tools = initialTools; // Update local state immediately
-            renderGrid();
-        } else {
-            console.error("Error seeding tools:", error);
-        }
-    }
-
-    // --- CRUD Operations ---
-
-    async function createTool(tool) {
-        // Optimistic UI update
-        state.tools.unshift(tool);
-        renderGrid();
-
-        const { error } = await supabase
-            .from('tools')
-            .insert([tool]);
-
-        if (error) {
-            console.error("Error creating tool:", error);
-            // Revert on error?
-            alert("Failed to save tool to database.");
-        }
-    }
-
-    async function updateTool(updatedTool) {
-        // Optimistic UI update
-        const index = state.tools.findIndex(t => t.id === updatedTool.id);
-        if (index !== -1) {
-            state.tools[index] = { ...state.tools[index], ...updatedTool };
-            renderGrid();
-        }
-
-        const { error } = await supabase
-            .from('tools')
-            .update({
-                title: updatedTool.title,
-                category: updatedTool.category,
-                url: updatedTool.url,
-                logo_url: updatedTool.logo_url,
-                description: updatedTool.description
-            })
-            .eq('id', updatedTool.id);
-
-        if (error) console.error("Error updating tool:", error);
-    }
-
-    async function deleteTool(id) {
-        if (confirm('Are you sure you want to delete this tool?')) {
-            // Optimistic UI update
-            state.tools = state.tools.filter(t => t.id !== id);
-            renderGrid();
-
-            const { error } = await supabase
-                .from('tools')
-                .delete()
-                .eq('id', id);
-
-            if (error) console.error("Error deleting tool:", error);
-        }
-    }
-
-    // --- Rendering (Same as before) ---
-    function renderCategories() {
-        elements.categoryScroller.innerHTML = state.categories.map(cat => `
-            <button 
-                class="chip ${cat === state.activeCategory ? 'active' : ''}" 
-                onclick="window.app.setCategory('${cat}')"
-            >
-                ${cat}
-            </button>
+        elements.heroAppsContainer.innerHTML = top3.map(app => `
+             <a href="${app.url}" target="_blank" class="flex flex-col items-center justify-center gap-6 cursor-pointer group">
+               <div class="hero-app-icon w-32 h-32 bg-white rounded-3xl flex items-center justify-center shadow-xl">
+                    <img src="${getFavicon(app)}" alt="${app.title}" class="w-24 h-24 object-contain">
+               </div>
+               <span class="font-light text-2xl text-white tracking-wide text-center drop-shadow-lg">${app.title}</span>
+            </a>
         `).join('');
     }
 
-    function renderCategoryOptions() {
-        const options = state.categories.filter(c => c !== 'All');
-        elements.inpCategory.innerHTML = options.map(cat => `<option value="${cat}">${cat}</option>`).join('');
-    }
+    // --- Render All Apps as MEGA CATEGORY BLOCKS ---
+    function renderAllApps() {
+        if (!elements.allAppsContainer) return;
 
-    function renderGrid() {
-        const filtered = state.activeCategory === 'All'
-            ? state.tools
-            : state.tools.filter(t => t.category === state.activeCategory);
+        // Determine which mega-categories to show based on filter
+        let categoriesToShow = megaCategories;
 
-        if (filtered.length === 0) {
-            elements.grid.innerHTML = `
-                <div style="grid-column: 1/-1; text-align: center; padding: 60px; color: var(--text-secondary);">
-                    <p>No tools found.</p>
-                </div>
-            `;
+        if (state.activeFilter !== 'all') {
+            categoriesToShow = megaCategories.filter(mega =>
+                mega.includes.some(cat =>
+                    cat === state.activeFilter ||
+                    allApps.find(g => g.category === cat && g.parentFilter === state.activeFilter)
+                )
+            );
+        }
+
+        if (categoriesToShow.length === 0) {
+            elements.allAppsContainer.innerHTML = `<div class="p-8 text-center text-slate-500">Aucune application trouvée.</div>`;
             return;
         }
 
-        elements.grid.innerHTML = filtered.map(tool => {
-            // Logic for logo: Custom URL > Favicon > Fallback (hidden)
-            const logoSrc = tool.logo_url && tool.logo_url.trim() !== ''
-                ? tool.logo_url
-                : `https://www.google.com/s2/favicons?domain=${tool.url}&sz=64`;
+        const blocksHtml = categoriesToShow.map(mega => {
+            const appsInMega = [];
+            mega.includes.forEach(catName => {
+                const group = allApps.find(g => g.category === catName);
+                if (group) {
+                    // Special filtering for Google category
+                    if (mega.name === "Google") {
+                        const googleApps = group.apps.filter(app =>
+                            app.title.toLowerCase().includes('google') ||
+                            app.title.toLowerCase().includes('gmail') ||
+                            app.url.includes('google.com')
+                        );
+                        appsInMega.push(...googleApps);
+                    } else {
+                        appsInMega.push(...group.apps);
+                    }
+                }
+            });
+
+            if (appsInMega.length === 0) return '';
 
             return `
-            <article class="card">
-                <div class="card-header">
-                    <span class="tag" style="${getCategoryColor(tool.category)}">${tool.category}</span>
-                    <div class="card-actions">
-                        <button class="icon-btn" onclick="window.app.edit('${tool.id}')" title="Edit">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 20h9"></path>
-                                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-                            </svg>
-                        </button>
-                        <button class="icon-btn delete" onclick="window.app.delete('${tool.id}')" title="Delete">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M3 6h18"></path>
-                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
-                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
-                                <line x1="10" y1="11" x2="10" y2="17"></line>
-                                <line x1="14" y1="11" x2="14" y2="17"></line>
-                            </svg>
-                        </button>
+                <div class="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-3xl p-8 bg-white/50 dark:bg-slate-800/30 backdrop-blur-sm transition-all hover:border-indigo-300 dark:hover:border-indigo-700">
+                    <!-- Block Header -->
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="p-3 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl shadow-lg">
+                            <i data-lucide="${mega.icon}" class="w-6 h-6 text-white"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-slate-900 dark:text-white">${mega.title}</h2>
+                            <p class="text-sm text-slate-500 dark:text-slate-400">${mega.subtitle}</p>
+                        </div>
                     </div>
+
+                    <!-- Apps Grid -->
+                <div class="grid grid-cols-3 gap-4 category-drop-zone" data-category="${mega.name}">
+                    ${appsInMega.map(app => `
+                        <div class="group flex flex-col items-center gap-2 cursor-pointer draggable-app" 
+                             data-app-id="${app.id}" 
+                             data-category="${mega.name}">
+                            <a href="${app.url}" target="_blank" class="relative aspect-square rounded-2xl bg-white dark:bg-card-dark border border-slate-100 dark:border-slate-800 hover:shadow-xl transition-all w-full p-3 flex items-center justify-center pointer-events-none overflow-hidden" title="${app.title}">
+                                <img src="${getFavicon(app)}" alt="${app.title}" class="w-full h-full object-cover rounded-xl drop-shadow-sm">
+                            </a>
+                            
+                            <!-- Overlay below app -->
+                            <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/80 rounded-lg px-3 py-1.5 pointer-events-none">
+                                <span class="text-white text-xs font-medium text-center whitespace-nowrap">${app.title}</span>
+                            </div>
+                        </div>
+                    `).join('')}
                 </div>
-                
-                <div class="card-identity">
-                    <img src="${logoSrc}" alt="${tool.title}" class="tool-logo" onerror="this.src='https://via.placeholder.com/32?text=?'">
-                    <h3 class="card-title">${tool.title}</h3>
                 </div>
-                <p class="card-desc">${tool.description}</p>
-                
-                <div class="card-footer">
-                    <a href="${tool.url}" target="_blank" class="visit-link">
-                        Visit Site
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                            <polyline points="15 3 21 3 21 9"></polyline>
-                            <line x1="10" y1="14" x2="21" y2="3"></line>
-                        </svg>
-                    </a>
-                </div>
-            </article>
-        `}).join('');
+            `;
+        }).join('');
+
+        // Wrap in horizontal grid container with 3 columns (2 rows for 6 categories)
+        elements.allAppsContainer.innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">${blocksHtml}</div>`;
+
+        if (window.lucide) window.lucide.createIcons();
     }
 
-    function getCategoryColor(cat) {
-        const colorMap = {
-            'AI': 'background-color: #d7effe; color: #005cbb;',
-            'Design': 'background-color: #ffd8d6; color: #bf0031;',
-            'Development': 'background-color: #c4eed0; color: #07471f;',
-            'SaaS': 'background-color: #ffeba4; color: #845d00;',
-            'Payments': 'background-color: #ffdbcf; color: #8e1f0b;',
-            'Automation': 'background-color: #e6d6f9; color: #530096;',
-            'Inspiration': 'background-color: #f2d7ff; color: #7800ab;',
-            'Utilities': 'background-color: #e2e3e5; color: #1e1e1e;'
-        };
-        return colorMap[cat] || 'background-color: #f1f3f4; color: #444746;';
-    }
+    function renderSidebarLists() {
+        if (!elements.sidebarAppList || !elements.sidebarFavoritesList) return;
 
-    // --- Modal Logic ---
+        let flatApps = [];
+        allApps.forEach(group => {
+            group.apps.forEach(app => {
+                flatApps.push({ ...app, categoryName: group.category });
+            });
+        });
 
-    function openModal(editingId = null) {
-        state.editingId = editingId;
-        if (editingId) {
-            const tool = state.tools.find(t => t.id === editingId);
-            if (tool) {
-                elements.modalTitle.textContent = 'Edit Tool';
-                elements.inpId.value = tool.id;
-                elements.inpTitle.value = tool.title;
-                elements.inpCategory.value = tool.category;
-                elements.inpUrl.value = tool.url;
-                if (elements.inpLogo) elements.inpLogo.value = tool.logo_url || '';
-                elements.inpDesc.value = tool.description;
-            }
+        flatApps.sort((a, b) => a.title.localeCompare(b.title));
+
+        const favorites = flatApps.filter(app => app.isFavorite);
+        const others = flatApps.filter(app => !app.isFavorite);
+
+        const createItemHtml = (app) => `
+            <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer group transition-colors sidebar-app-item" 
+                 draggable="true" 
+                 data-id="${app.id}"
+                 title="Drag to move, Click to edit">
+                <img src="${getFavicon(app)}" class="w-5 h-5 object-contain rounded-md bg-white dark:bg-slate-700 p-0.5 shadow-sm pointer-events-none" alt="${app.title}">
+                <div class="flex-1 min-w-0 pointer-events-none">
+                    <p class="text-xs font-semibold text-slate-700 dark:text-slate-300 truncate">${app.title}</p>
+                </div>
+                <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button class="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-lg transition-all edit-app-btn" title="Modifier" onclick="event.stopPropagation();">
+                        <i data-lucide="edit-2" class="w-3.5 h-3.5 pointer-events-none"></i>
+                    </button>
+                    <button class="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all delete-app-btn" title="Supprimer" onclick="event.stopPropagation();">
+                        <i data-lucide="trash-2" class="w-3.5 h-3.5 pointer-events-none"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+
+        if (favorites.length === 0) {
+            elements.sidebarFavoritesList.innerHTML = `<div class="text-xs text-slate-400 text-center py-2 italic placeholder">Glissez ici vos favoris</div>`;
         } else {
-            elements.modalTitle.textContent = 'Submit a Tool';
-            elements.form.reset();
-            elements.inpId.value = '';
+            elements.sidebarFavoritesList.innerHTML = favorites.map(createItemHtml).join('');
         }
-        elements.modalOverlay.classList.remove('hidden');
-        elements.modalOverlay.classList.add('open');
-        document.body.style.overflow = 'hidden';
+
+        elements.sidebarAppList.innerHTML = others.map(createItemHtml).join('');
+
+        setupSidebarInteractions();
+        if (window.lucide) window.lucide.createIcons();
+    }
+
+    function setupSidebarInteractions() {
+        const allItems = document.querySelectorAll('.sidebar-app-item');
+        allItems.forEach(item => {
+            // Click on entire item opens edit modal
+            item.addEventListener('click', (e) => {
+                if (e.target.closest('.edit-app-btn') || e.target.closest('.delete-app-btn')) {
+                    return; // Don't open modal if clicking buttons
+                }
+
+                const appId = item.getAttribute('data-id');
+                let appToEdit = null;
+                let catName = null;
+                for (let g of allApps) {
+                    const found = g.apps.find(a => a.id === appId);
+                    if (found) { appToEdit = found; catName = g.category; break; }
+                }
+
+                if (appToEdit) {
+                    openModal(appToEdit, catName);
+                }
+            });
+
+            // Edit button handler
+            const editBtn = item.querySelector('.edit-app-btn');
+            if (editBtn) {
+                editBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const appId = item.getAttribute('data-id');
+                    let appToEdit = null;
+                    let catName = null;
+                    for (let g of allApps) {
+                        const found = g.apps.find(a => a.id === appId);
+                        if (found) { appToEdit = found; catName = g.category; break; }
+                    }
+                    if (appToEdit) {
+                        openModal(appToEdit, catName);
+                    }
+                });
+            }
+
+            // Delete button handler
+            const deleteBtn = item.querySelector('.delete-app-btn');
+            if (deleteBtn) {
+                deleteBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const appId = item.getAttribute('data-id');
+                    deleteApp(appId);
+                });
+            }
+
+            item.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text/plain', item.getAttribute('data-id'));
+                e.dataTransfer.effectAllowed = 'move';
+                item.classList.add('opacity-50');
+            });
+
+            item.addEventListener('dragend', (e) => {
+                item.classList.remove('opacity-50');
+                elements.sidebarFavoritesList.classList.remove('bg-indigo-50', 'dark:bg-indigo-900/20', 'border-indigo-300');
+                elements.sidebarAppList.classList.remove('bg-indigo-50', 'dark:bg-indigo-900/20', 'border-indigo-300');
+            });
+        });
+
+        [elements.sidebarFavoritesList, elements.sidebarAppList].forEach(zone => {
+            zone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+                zone.classList.add('bg-indigo-50', 'dark:bg-indigo-900/20', 'border-indigo-300');
+            });
+
+            zone.addEventListener('dragleave', (e) => {
+                zone.classList.remove('bg-indigo-50', 'dark:bg-indigo-900/20', 'border-indigo-300');
+            });
+
+            zone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                zone.classList.remove('bg-indigo-50', 'dark:bg-indigo-900/20', 'border-indigo-300');
+
+                const appId = e.dataTransfer.getData('text/plain');
+                const targetZone = zone.getAttribute('data-drop-zone');
+                updateAppFavoriteStatus(appId, targetZone === 'favorites');
+            });
+        });
+    }
+
+    function updateAppFavoriteStatus(appId, isFavorite) {
+        let found = false;
+        for (let g of allApps) {
+            const app = g.apps.find(a => a.id === appId);
+            if (app) {
+                if (app.isFavorite !== isFavorite) {
+                    app.isFavorite = isFavorite;
+                    found = true;
+                }
+                break;
+            }
+        }
+
+        if (found) {
+            renderSidebarLists();
+            renderAllApps();
+            renderHeroFavorites();
+        }
+    }
+
+    function deleteApp(appId) {
+        let appToDelete = null;
+        let groupIndex = -1;
+        let appIndex = -1;
+
+        for (let i = 0; i < allApps.length; i++) {
+            const idx = allApps[i].apps.findIndex(a => a.id === appId);
+            if (idx !== -1) {
+                appToDelete = allApps[i].apps[idx];
+                groupIndex = i;
+                appIndex = idx;
+                break;
+            }
+        }
+
+        if (!appToDelete) return;
+
+        if (confirm(`Supprimer "${appToDelete.title}" ?\n\nCette action est irréversible.`)) {
+            allApps[groupIndex].apps.splice(appIndex, 1);
+
+            renderSidebarLists();
+            renderAllApps();
+            renderHeroFavorites();
+        }
+    }
+
+    function openModal(appToEdit = null, categoryName = null) {
+        if (!elements.modal) return;
+
+        elements.iconUrlInput.value = '';
+        elements.pastePreview.classList.add('hidden');
+        elements.pastePreview.src = '';
+
+        if (appToEdit) {
+            state.editingAppId = appToEdit.id;
+            elements.modalTitle.textContent = "Modifier l'application";
+            elements.modalSubmitBtn.textContent = "Enregistrer les modifications";
+
+            document.getElementById('app-name').value = appToEdit.title;
+            document.getElementById('app-url').value = appToEdit.url;
+            document.getElementById('app-category').value = categoryName || 'Development';
+
+            if (appToEdit.customIcon) {
+                elements.iconUrlInput.value = appToEdit.customIcon;
+                elements.pastePreview.src = appToEdit.customIcon;
+                elements.pastePreview.classList.remove('hidden');
+            }
+
+        } else {
+            state.editingAppId = null;
+            elements.modalTitle.textContent = "Ajouter une application";
+            elements.modalSubmitBtn.textContent = "Ajouter au Dashboard";
+            elements.addAppForm.reset();
+        }
+
+        elements.modal.classList.remove('hidden');
+        setTimeout(() => {
+            elements.modal.classList.remove('opacity-0');
+            elements.modal.querySelector('div').classList.remove('scale-95');
+        }, 10);
+
+        elements.pasteArea.focus();
     }
 
     function closeModal() {
-        elements.modalOverlay.classList.remove('open');
-        document.body.style.overflow = '';
+        if (!elements.modal) return;
+        elements.modal.classList.add('opacity-0');
+        elements.modal.querySelector('div').classList.add('scale-95');
         setTimeout(() => {
-            state.editingId = null;
-            elements.form.reset();
+            elements.modal.classList.add('hidden');
+            state.editingAppId = null;
         }, 300);
     }
 
-    // --- Event Exposure (Global) ---
-    window.app = {
-        setCategory: (cat) => {
-            state.activeCategory = cat;
-            renderCategories();
-            renderGrid();
-        },
-        edit: (id) => openModal(id),
-        delete: (id) => deleteTool(id)
-    };
+    function handleAddApp(e) {
+        e.preventDefault();
+        const name = document.getElementById('app-name').value;
+        let url = document.getElementById('app-url').value;
+        const iconUrl = document.getElementById('app-icon-url').value;
+        const category = document.getElementById('app-category').value;
 
-    // --- Event Listeners ---
-    function attachEventListeners() {
-        elements.addBtn.addEventListener('click', () => openModal(null));
-        elements.closeModalBtn.addEventListener('click', closeModal);
-        elements.modalOverlay.addEventListener('click', (e) => {
-            if (e.target === elements.modalOverlay) closeModal();
-        });
+        if (!url.startsWith('http')) {
+            url = 'https://' + url;
+        }
 
-        elements.form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const formData = new FormData(elements.form);
-            const toolData = {
-                title: formData.get('title'),
-                category: formData.get('category'),
-                url: formData.get('url'),
-                logo_url: formData.get('logo_url'), // New field
-                description: formData.get('description')
-            };
+        if (state.editingAppId) {
+            let oldGroup = null;
+            let appIndex = -1;
 
-            if (state.editingId) {
-                updateTool({ id: state.editingId, ...toolData });
-            } else {
-                createTool({
-                    id: crypto.randomUUID(),
-                    // Supabase handles 'created_at' usually, but safe to send if column matches
-                    created_at: new Date().toISOString(),
-                    ...toolData
+            for (let g of allApps) {
+                const idx = g.apps.findIndex(a => a.id === state.editingAppId);
+                if (idx !== -1) {
+                    oldGroup = g;
+                    appIndex = idx;
+                    break;
+                }
+            }
+
+            let isFav = false;
+            if (oldGroup) {
+                isFav = oldGroup.apps[appIndex].isFavorite || false;
+                oldGroup.apps.splice(appIndex, 1);
+            }
+
+            let targetGroup = allApps.find(g => g.category.includes(category) || g.parentFilter === category);
+            if (!targetGroup) targetGroup = allApps[0];
+
+            if (targetGroup) {
+                targetGroup.apps.push({
+                    id: state.editingAppId,
+                    title: name,
+                    desc: "User App",
+                    url: url,
+                    customIcon: iconUrl || null,
+                    isFavorite: isFav
                 });
             }
-            closeModal();
-        });
+
+        } else {
+            let targetGroup = allApps.find(g => g.category.includes(category) || g.parentFilter === category);
+            if (!targetGroup) {
+                if (category === 'Development') targetGroup = allApps.find(g => g.category === 'Development');
+                else if (category === 'Design') targetGroup = allApps.find(g => g.category === 'Design');
+                else if (category === 'Divertissement') targetGroup = allApps.find(g => g.category === 'Divertissement');
+                else if (category === 'Finance & Banque') targetGroup = allApps.find(g => g.category === 'Finance & Banque');
+                else if (category === 'SaaS & Productivité') targetGroup = allApps.find(g => g.category === 'SaaS & Productivité');
+                else if (category === 'Veille & Social') targetGroup = allApps.find(g => g.category === 'Veille & Social');
+            }
+
+            if (targetGroup) {
+                targetGroup.apps.push({
+                    id: generateId(),
+                    title: name,
+                    desc: 'Added User App',
+                    url: url,
+                    customIcon: iconUrl || null,
+                    isFavorite: false
+                });
+            } else {
+                alert('Erreur: Catégorie introuvable.');
+                return;
+            }
+        }
+
+        renderAllApps();
+        renderSidebarLists();
+        renderHeroFavorites();
+        closeModal();
     }
 
-    // Start
+    function handleImagePaste(e) {
+        const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+        for (let index in items) {
+            const item = items[index];
+            if (item.kind === 'file' && item.type.includes('image/')) {
+                const blob = item.getAsFile();
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    elements.iconUrlInput.value = event.target.result;
+                    elements.pastePreview.src = event.target.result;
+                    elements.pastePreview.classList.remove('hidden');
+                };
+                reader.readAsDataURL(blob);
+                e.preventDefault();
+                return;
+            }
+        }
+    }
+
+    function renderReadLater() {
+        if (!elements.readLaterList) return;
+        elements.readLaterList.innerHTML = state.readLater.map(item => `
+            <div class="group flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-all cursor-pointer border border-transparent hover:border-slate-200 dark:hover:border-slate-700 relative" onclick="window.open('${item.url}', '_blank')">
+                <div class="w-1 h-8 bg-indigo-500 rounded-full"></div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-semibold text-slate-700 dark:text-slate-200 truncate">${item.title}</p>
+                    <p class="text-xs text-slate-400 truncate">Added recently</p>
+                </div>
+                <button onclick="event.stopPropagation(); window.app.deleteReadLater('${item.id}')" class="opacity-0 group-hover:opacity-100 p-2 text-slate-400 hover:text-red-500 transition-all">
+                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+            </div>
+        `).join('');
+        if (window.lucide) window.lucide.createIcons();
+    }
+
+    function addReadLater() {
+        const title = prompt("Titre de l'article / lien :");
+        if (title) {
+            state.readLater.unshift({ id: crypto.randomUUID(), title, url: '#' });
+            renderReadLater();
+        }
+    }
+
+    function deleteReadLater(id) {
+        if (confirm("Supprimer ce lien ?")) {
+            state.readLater = state.readLater.filter(i => i.id !== id);
+            renderReadLater();
+        }
+    }
+
+    window.app = { deleteReadLater, addReadLater };
+
+    function attachEventListeners() {
+        if (elements.addReadLaterBtn) {
+            elements.addReadLaterBtn.addEventListener('click', addReadLater);
+        }
+
+        elements.sidebarLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                elements.sidebarLinks.forEach(l => {
+                    l.classList.remove('bg-indigo-600', 'text-white', 'shadow-md');
+                    l.classList.add('text-slate-500', 'hover:bg-slate-100');
+                });
+                const target = e.currentTarget;
+                target.classList.remove('text-slate-500', 'hover:bg-slate-100');
+                target.classList.add('bg-indigo-600', 'text-white', 'shadow-md');
+                state.activeFilter = target.getAttribute('data-filter');
+                renderAllApps();
+            });
+        });
+
+        if (elements.openModalBtn) elements.openModalBtn.addEventListener('click', () => openModal(null));
+        if (elements.closeModalBtn) elements.closeModalBtn.addEventListener('click', closeModal);
+        if (elements.addAppForm) elements.addAppForm.addEventListener('submit', handleAddApp);
+
+        if (elements.pasteArea) {
+            elements.pasteArea.addEventListener('paste', handleImagePaste);
+        }
+
+        if (elements.modal) {
+            elements.modal.addEventListener('click', (e) => {
+                if (e.target === elements.modal) closeModal();
+            });
+        }
+    }
+
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
         init();
     }
 })();
+

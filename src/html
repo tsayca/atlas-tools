@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>ATLAS SaaS Workspace Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#6366f1",
+                        "background-light": "#f8fafc",
+                        "background-dark": "#0f172a",
+                        "card-light": "#ffffff",
+                        "card-dark": "#1e293b",
+                    },
+                    fontFamily: {
+                        display: ["Plus Jakarta Sans", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "12px",
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .glass-card {
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .sidebar-item:hover {
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-auto-rows: minmax(160px, auto);
+            gap: 1.5rem;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 transition-colors duration-300">
+    <div class="flex h-screen overflow-hidden">
+        <aside
+            class="w-20 lg:w-64 border-r border-slate-200 dark:border-slate-800 bg-card-light dark:bg-card-dark flex flex-col items-center lg:items-start p-4 lg:p-6 transition-all duration-300">
+            <div class="flex items-center gap-3 mb-10 px-2">
+                <div
+                    class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary/20">
+                    <span class="material-icons-round">category</span>
+                </div>
+                <span class="text-xl font-bold tracking-tight hidden lg:block">ATLAS</span>
+            </div>
+            <nav class="flex-1 w-full space-y-2">
+                <a class="flex items-center gap-4 p-3 rounded-xl bg-primary text-white shadow-md transition-all"
+                    href="#">
+                    <span class="material-icons-round">dashboard</span>
+                    <span class="font-medium hidden lg:block">Workspace</span>
+                </a>
+                <a class="flex items-center gap-4 p-3 rounded-xl text-slate-500 dark:text-slate-400 sidebar-item transition-all"
+                    href="#">
+                    <span class="material-icons-round">extension</span>
+                    <span class="font-medium hidden lg:block">Plugins</span>
+                </a>
+                <a class="flex items-center gap-4 p-3 rounded-xl text-slate-500 dark:text-slate-400 sidebar-item transition-all"
+                    href="#">
+                    <span class="material-icons-round">people</span>
+                    <span class="font-medium hidden lg:block">Team</span>
+                </a>
+                <a class="flex items-center gap-4 p-3 rounded-xl text-slate-500 dark:text-slate-400 sidebar-item transition-all"
+                    href="#">
+                    <span class="material-icons-round">settings</span>
+                    <span class="font-medium hidden lg:block">Settings</span>
+                </a>
+            </nav>
+            <div class="w-full pt-6 border-t border-slate-200 dark:border-slate-800">
+                <div
+                    class="p-3 rounded-xl flex items-center gap-4 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+                    <img alt="User avatar" class="w-10 h-10 rounded-full border-2 border-primary/20"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjVqjxE0TI4awM8cpbjWUe8fCf88dznIORxLVS8MvNO0Rrr404nzlMZEooD4u8I3MsFVwbt1oUUjMr3b7vp98VU93aZLlC3K1CCjl-o5tM1KF3IGbsIjBuK_YJXJ2veLSJ2HD2FFsoLjr6do2IIAk3vUTnBibgu8A6R1fKJkCVnaEdcU6loJnrQpwg0o1YESIcYsMilsUJZjeqS-7cbnRXFZVV3FCCc2jJvlhWUL-BcTB8TEZ8QxDlGUEMwbdsA_qN2QSHMj_hDf8" />
+                    <div class="hidden lg:block">
+                        <p class="text-sm font-semibold truncate">Alex Rivera</p>
+                        <p class="text-xs text-slate-500">Pro Plan</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <main class="flex-1 overflow-y-auto p-6 lg:p-10">
+            <header class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
+                <div>
+                    <h1 class="text-3xl font-bold mb-2">Workspace Dashboard</h1>
+                    <p class="text-slate-500 dark:text-slate-400">Welcome back, Alex. Your projects are up to date.</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="relative group">
+                        <span
+                            class="material-icons-round absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">search</span>
+                        <input
+                            class="pl-10 pr-4 py-2.5 bg-card-light dark:bg-card-dark border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none w-full md:w-64 transition-all"
+                            placeholder="Search resources..." type="text" />
+                    </div>
+                    <button
+                        class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-card-light dark:bg-card-dark text-slate-500 hover:text-primary transition-all"
+                        onclick="document.documentElement.classList.toggle('dark')">
+                        <span class="material-icons-round block dark:hidden">dark_mode</span>
+                        <span class="material-icons-round hidden dark:block">light_mode</span>
+                    </button>
+                    <button
+                        class="bg-primary text-white px-5 py-2.5 rounded-xl font-semibold shadow-lg shadow-primary/25 flex items-center gap-2 hover:translate-y-[-1px] transition-all">
+                        <span class="material-icons-round text-lg">add</span>
+                        New Project
+                    </button>
+                </div>
+            </header>
+            <div class="bento-grid">
+                <div
+                    class="col-span-4 lg:col-span-3 row-span-2 rounded-[24px] bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-8 text-white relative overflow-hidden group">
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-3 mb-6">
+                            <span
+                                class="bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">AI
+                                Integration</span>
+                        </div>
+                        <h2 class="text-4xl font-extrabold mb-4 max-w-lg">Supercharge your workflow with next-gen AI
+                            tools</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+                            <div
+                                class="glass-card bg-white/10 hover:bg-white/20 border border-white/20 p-5 rounded-2xl transition-all cursor-pointer">
+                                <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center mb-4">
+                                    <img alt="Gemini" class="w-8 h-8"
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFnROqO7onZM-BiZyDjrSJi4Wcl2EP0l_8FYckcFPMpg41G-y6VMW1Bx_F28YOsBSACZwS9-zYKZ6LQwPLgDynBb17pyUD7GRawOHUfOMvY8OfWfIAjEp-3bdHAl4D-scKB0SNWdxSkY_9AJ0WntD6gm3eGGWtHYVNSax9RFxWoxa5ixIS5SFsrvKpW3gmxYX892exjR5biKqLZkFQ6u0YP28PGUYlLqzhBtklXx98GBF-IC7h2-aTMNS7KavsTe5RfB21PoSSzVQ" />
+                                </div>
+                                <h3 class="font-bold text-lg mb-1">Gemini Pro</h3>
+                                <p class="text-sm text-white/70">Advanced multimodal reasoning</p>
+                            </div>
+                            <div
+                                class="glass-card bg-white/10 hover:bg-white/20 border border-white/20 p-5 rounded-2xl transition-all cursor-pointer">
+                                <div class="w-12 h-12 bg-[#74aa9c] rounded-xl flex items-center justify-center mb-4">
+                                    <img alt="ChatGPT" class="w-7 h-7"
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqXYtjJsperhtM-_m_VuayTbwwOG2CTKQLesZAOTlnwMRXGU_d3WPVUQd3uiTbdZooOq_Mhz4fGoSxx2tz9PUtgBtoPBajiUsoFxgKFbHo5srElJJdQ-8iCybiWtA7WKcAcBGw_cnri5XB_SpH38V2p0ID8YFFkLmK3fYcVtO-fwvwMDhDFfWBlOrqK5-beA0W70Kw26zR3VVSwCWRopl2lFY1wJm2ZQTUwhfTy876y_I9y66YU6TD4IQ1SBkJs6qmAC3tYZoqESI" />
+                                </div>
+                                <h3 class="font-bold text-lg mb-1">GPT-4 Turbo</h3>
+                                <p class="text-sm text-white/70">High-speed content generation</p>
+                            </div>
+                            <div
+                                class="glass-card bg-white/10 hover:bg-white/20 border border-white/20 p-5 rounded-2xl transition-all cursor-pointer">
+                                <div class="w-12 h-12 bg-[#d97757] rounded-xl flex items-center justify-center mb-4">
+                                    <span class="font-black text-xl">C</span>
+                                </div>
+                                <h3 class="font-bold text-lg mb-1">Claude 3</h3>
+                                <p class="text-sm text-white/70">Complex coding &amp; analysis</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="absolute -right-20 -bottom-20 w-80 h-80 bg-white/10 rounded-full blur-3xl group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                </div>
+                <div
+                    class="col-span-4 lg:col-span-1 row-span-2 bg-card-light dark:bg-card-dark rounded-[24px] p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="font-bold text-lg">Active Tasks</h3>
+                        <span class="material-icons-round text-slate-400">more_horiz</span>
+                    </div>
+                    <div class="space-y-4 flex-1">
+                        <div
+                            class="flex items-center gap-4 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                            <div class="w-2 h-10 bg-blue-500 rounded-full"></div>
+                            <div class="flex-1">
+                                <p class="text-sm font-semibold">Figma Design Review</p>
+                                <p class="text-xs text-slate-500">Main Dashboard v2</p>
+                            </div>
+                        </div>
+                        <div
+                            class="flex items-center gap-4 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                            <div class="w-2 h-10 bg-emerald-500 rounded-full"></div>
+                            <div class="flex-1">
+                                <p class="text-sm font-semibold">GitHub Push</p>
+                                <p class="text-xs text-slate-500">Auth microservice fix</p>
+                            </div>
+                        </div>
+                        <div
+                            class="flex items-center gap-4 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                            <div class="w-2 h-10 bg-amber-500 rounded-full"></div>
+                            <div class="flex-1">
+                                <p class="text-sm font-semibold">Webflow Export</p>
+                                <p class="text-xs text-slate-500">Landing page assets</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button
+                        class="w-full mt-6 py-3 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl text-slate-500 font-medium hover:border-primary hover:text-primary transition-all">
+                        View All Activity
+                    </button>
+                </div>
+                <div
+                    class="col-span-4 lg:col-span-2 bg-card-light dark:bg-card-dark rounded-[24px] p-6 border border-slate-200 dark:border-slate-800 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-bold">Inspiration Hub</h3>
+                        <span class="text-xs font-semibold text-primary px-2 py-1 bg-primary/10 rounded-lg">New
+                            Feeds</span>
+                    </div>
+                    <div class="flex gap-4">
+                        <div
+                            class="flex-1 aspect-square bg-pink-50 dark:bg-pink-900/20 rounded-2xl flex items-center justify-center group cursor-pointer overflow-hidden">
+                            <img alt="Dribbble" class="w-12 h-12 group-hover:scale-110 transition-transform"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnH0JK852o_D6MPvbnM2099SjMyiH5UqAxwtrL64FF1eGNcgIvtN8gKShZDYTW-Y_PIA9ZiD0fiv1K0fG2yYtvIgpCViIFT1z3mi_0TpCCHBBqKMfhXS2EyTbm-KrVqkMOpiuXAYreFG5kolAPlwHBS1rWVh9VQG5gf9vq0AlOudYSowX-9F5E3ROvkpNCamLw89sOoSZX1db9j6Zrby2gszw3dLPcxsNrqRFFHdmuVoOWqun9Im60m7lcR2fVUqqKFPNd0t5auVI" />
+                        </div>
+                        <div
+                            class="flex-1 aspect-square bg-red-50 dark:bg-red-900/20 rounded-2xl flex items-center justify-center group cursor-pointer overflow-hidden">
+                            <img alt="Pinterest" class="w-12 h-12 group-hover:scale-110 transition-transform"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0Rg3Ko0XzZgPicNAu8I66_vFMZnuMqA7yxN-FUNf8jbQ1rjbvxA6jnFCb8DiGhNB_IRLmEeCq3w1SFHrWshaGKaJkOQCs5oyIpQTCMcTGZx0Dkr9Y9moWEee_gu1PhXSzXWhe48sEUtFMdDfawKW_VE1bkE-WguWeKIRO4r6ZKbimxWJ33nqIRXjQ8PI6Ej-NNJG26HdQwOBQ_EEQ4kp6dIwS7gHcKX5gI893JEzzDFBYa7gboz-vU0Ex2kzLQKaYKoa-Tyvy-oY" />
+                        </div>
+                        <div
+                            class="flex-1 aspect-square bg-blue-50 dark:bg-blue-900/20 rounded-2xl flex items-center justify-center group cursor-pointer overflow-hidden">
+                            <img alt="Behance" class="w-12 h-12 group-hover:scale-110 transition-transform"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0jbwMzDfWsFFwKcbhshTQgpHkVXSmBNA4YzqY0VaBoyavasnb856Xi7OWNOolapaF3yldaR_cOtDu57gU20cWkOXK2pHgsKK8fcdUE2gFY-bfvHGYAgCYkdroNTmlFPfnYZpuBvYx-WxQPp4q5uzYMe1B_0hiJggYCbXzTgcv2ikPcKAUmRVeP_D6xTHOfkNEiqjfqBBrJBLJIF6S2DQYYYGHd9e1rnZyVCA946mYEvRccJrEnnhO-vF6ve29m9Bb73T2D0An_WU" />
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="col-span-4 lg:col-span-2 bg-card-light dark:bg-card-dark rounded-[24px] p-6 border border-slate-200 dark:border-slate-800 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-bold">Design &amp; Prototyping</h3>
+                        <span class="material-icons-round text-slate-400">auto_fix_high</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div
+                            class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                            <div class="w-10 h-10 bg-black rounded-lg flex items-center justify-center">
+                                <img alt="Figma" class="w-6 h-6"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuArJnDUvBtn4PtggIVSpVRSuAF2j3gmkQS9BqsVofNCfKH96v8XvVLgplvXC1b34Gl7iNKzInhuV-bclob0EjUi7FirRHZ2vgTqRzpZS3PVompbnKYSWCsX99E0VssQA4Aw0mxmGzUhfLFVuRaDCvrNTU8fJbzFMCcq-bNMYmChRECVDBl5t2xp2uNeQhPjolMPzGVrrqqKLrk9mvSuTHhtT9txJuuz6HMGHIOCClaZCC9Zoeh9Lqzzggy4zt8jpkKOXOtoXfLQRSM" />
+                            </div>
+                            <span class="font-semibold text-sm">Figma</span>
+                        </div>
+                        <div
+                            class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                            <div class="w-10 h-10 bg-yellow-400 rounded-lg flex items-center justify-center">
+                                <img alt="Sketch" class="w-6 h-6"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIrziObDseCD43vI0Qmb6tdAzp6WW0PDc59bmQ2CniDGUksOTCOtn-VRI1CfyL3JlWiFSJbXqz4hpRECBTrH_Yaa-DwWgSD9kjSmpToyZP_kIH3FLnPModSNEuk9Scna_bF7WFQ9HloQYvm3kxECEvNZVdgGriycBIx9BwzaflUk7_rEd3gZeAoH0PZjsS5VvYCjoc0LWYXY9ykotl96NMVEC4N-IZaXZR6ZRSR3gpj71S7RwhahrJU_XFaGWr_6hnRYGWliPg7qo" />
+                            </div>
+                            <span class="font-semibold text-sm">Sketch</span>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="col-span-4 lg:col-span-4 bg-card-light dark:bg-card-dark rounded-[24px] p-8 border border-slate-200 dark:border-slate-800 shadow-sm">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                        <div>
+                            <h3 class="text-xl font-bold mb-1">Infrastructure Status</h3>
+                            <p class="text-slate-500 text-sm">Real-time deployment tracking for ATLAS microservices</p>
+                        </div>
+                        <div class="flex items-center gap-6">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M24 22.525H0l12-21.05 12 21.05z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-slate-500 font-bold uppercase">Vercel</p>
+                                    <p class="text-sm font-semibold text-emerald-500 flex items-center gap-1">
+                                        <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                                        Live
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="w-px h-10 bg-slate-200 dark:bg-slate-700 hidden md:block"></div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
+                                    <span class="material-icons-round text-white">cloud</span>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-slate-500 font-bold uppercase">Netlify</p>
+                                    <p class="text-sm font-semibold text-emerald-500 flex items-center gap-1">
+                                        <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                                        Stable
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <button
+                            class="bg-slate-900 dark:bg-white dark:text-slate-900 text-white px-6 py-3 rounded-xl font-bold text-sm transition-transform hover:scale-105">
+                            Open Console
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+</body>
+
+</html>

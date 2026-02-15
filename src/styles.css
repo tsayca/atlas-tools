@@ -1,38 +1,48 @@
-/* Google Antigravity Inspired CSS */
+/* Apple / Linear Inspired CSS */
 :root {
-    /* Colors */
-    --bg-page: #ffffff;
-    --bg-card: #f8f9fa;
-    /* Light gray surface */
-    --bg-card-hover: #ffffff;
+    /* Colors from Stitch */
+    --bg-page: #f5f5f7;
+    --bg-card: #ffffff;
+    --bg-sidebar: rgba(255, 255, 255, 0.7);
+    /* Stitch Glass */
 
-    --text-primary: #202124;
-    --text-secondary: #5f6368;
-    --text-tertiary: #dadce0;
+    --text-primary: #1d1d1f;
+    --text-secondary: #6b7280;
+    /* Gray-500 */
+    --text-tertiary: #d1d5db;
+    /* Gray-300 */
 
-    --accent-blue: #1a73e8;
-    --accent-blue-hover: #1765cc;
+    --accent-blue: #135bec;
+    /* Stitch Primary */
+    --accent-blue-hover: #0f4bb8;
 
-    --border-subtle: #f1f3f4;
-    --border-hover: #dadce0;
+    --border-subtle: #f9fafb;
+    /* Gray-50 */
+    --border-hover: rgba(0, 0, 0, 0.1);
 
-    /* Shadows - Smooth & Deep */
-    --shadow-card: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
-    --shadow-hover: 0 4px 8px 3px rgba(60, 64, 67, 0.15), 0 1px 3px rgba(60, 64, 67, 0.3);
-    --shadow-modal: 0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 9px 46px 8px rgba(0, 0, 0, 0.12), 0 11px 15px -7px rgba(0, 0, 0, 0.2);
+    /* Shadows - Stitch Style */
+    --shadow-card: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    /* shadow-sm */
+    --shadow-hover: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-modal: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    /* shadow-xl */
 
     /* Typography */
-    --font-family: 'Google Sans', 'Inter', Roboto, sans-serif;
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 
     /* Radius */
-    --radius-xl: 28px;
-    /* Antigravity characteristic */
-    --radius-lg: 16px;
+    --radius-xl: 16px;
+    /* Stitch rounded-2xl */
+    --radius-lg: 12px;
+    /* rounded-xl */
     --radius-md: 8px;
-    --radius-pill: 999px;
+    /* rounded-lg */
+    --radius-sm: 4px;
+    /* rounded */
+    --radius-pill: 9999px;
 
     /* Transitions */
-    --ease-spring: cubic-bezier(0.4, 0.0, 0.2, 1);
+    --ease-spring: cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 /* Base */
@@ -46,8 +56,9 @@ body {
     font-family: var(--font-family);
     background-color: var(--bg-page);
     color: var(--text-primary);
-    line-height: 1.6;
+    line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.01em;
 }
 
 button {
@@ -57,339 +68,680 @@ button {
     cursor: pointer;
 }
 
-/* Layout */
-.app-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 40px;
+/* Utilities */
+.hidden {
+    display: none !important;
+}
+
+/* --- Layout --- */
+.app-layout {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--bg-page);
+}
+
+/* Sidebar (Glassmorphism) */
+.sidebar {
+    width: 260px;
+    background: rgba(249, 249, 249, 0.9);
+    /* Opaque enough to hide content behind */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-right: 1px solid rgba(0, 0, 0, 0.06);
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    flex-shrink: 0;
+    transition: width 0.4s cubic-bezier(0.2, 0, 0, 1);
+    /* Ease Out Quart/Quint */
+    padding: 12px;
+}
+
+.sidebar.collapsed {
+    width: 68px;
+    /* Tighter width like ChatGPT */
+    padding: 12px 0;
+    /* Removing horizontal padding helps centering */
 }
 
 /* Header */
-header {
+.sidebar-header {
+    padding: 0 12px;
     display: flex;
     justify-content: space-between;
+    /* Logo Left, Toggle Right */
     align-items: center;
-    margin-bottom: 80px;
-    padding: 20px 0;
+    height: 48px;
+    /* Standard header height */
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+    /* Hide overflow content during transition */
 }
 
 .brand {
-    font-size: 24px;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    color: var(--text-primary);
-}
-
-.brand svg {
-    fill: currentColor;
-}
-
-/* Hero */
-.hero {
-    text-align: center;
-    margin-bottom: 80px;
-    opacity: 0;
-    animation: fadeIn 0.8s var(--ease-spring) forwards;
-}
-
-.hero h1 {
-    font-size: 64px;
-    font-weight: 500;
-    letter-spacing: -1.5px;
-    margin-bottom: 24px;
-    line-height: 1.1;
-}
-
-.hero p {
-    font-size: 20px;
-    color: var(--text-secondary);
-    max-width: 600px;
-    margin: 0 auto 40px;
-}
-
-/* Inputs / Actions */
-.action-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 40px;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-
-.action-bar.justify-center {
-    justify-content: center;
-}
-
-.search-bar {
-    background: var(--bg-card);
-    border-radius: var(--radius-pill);
-    padding: 12px 24px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-    max-width: 400px;
-    transition: background 0.2s;
-}
-
-/* ... existing code ... */
-
-.visit-link {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    font-weight: 500;
-    color: var(--text-primary);
-    border: 1px solid var(--border-hover);
-    border-radius: var(--radius-pill);
-    padding: 10px 24px;
-    width: 100%;
-    transition: all 0.2s ease;
-    text-decoration: none;
-    margin-top: 16px;
-}
-
-.visit-link:hover {
-    background: var(--text-primary);
-    color: white;
-    border-color: var(--text-primary);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    opacity: 1;
-    text-decoration: none;
-}
-
-.search-bar:focus-within {
-    background: #f1f3f4;
-    box-shadow: 0 1px 1px 0 rgba(65, 69, 73, 0.3), 0 1px 3px 1px rgba(65, 69, 73, 0.15);
-}
-
-.search-bar input {
-    border: none;
-    background: transparent;
     font-size: 16px;
-    outline: none;
-    width: 100%;
-    color: var(--text-primary);
-}
-
-.btn-primary {
-    background: var(--text-primary);
-    color: white;
-    padding: 14px 28px;
-    border-radius: var(--radius-pill);
-    font-weight: 500;
-    font-size: 15px;
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-/* Category Filter */
-.categories {
-    display: flex;
-    justify-content: center;
-    /* PERFECT CENTERING */
-    gap: 12px;
-    flex-wrap: wrap;
-    /* Allow wrapping on small screens if needed */
-    padding-bottom: 8px;
-    margin-bottom: 40px;
-    /* Increased margin for better spacing */
-}
-
-.chip {
-    padding: 10px 20px;
-    border-radius: 12px;
-    /* Slightly squarer than pill for modern feel */
-    background: var(--bg-card);
-    color: var(--text-secondary);
-    font-weight: 500;
-    font-size: 14px;
-    transition: all 0.2s;
-    white-space: nowrap;
-}
-
-.chip:hover {
-    background: #e8eaed;
-    color: var(--text-primary);
-}
-
-.chip.active {
-    background: var(--text-primary);
-    color: white;
-}
-
-/* Grid */
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-    gap: 32px;
-}
-
-/* Card - The Star of the Show */
-.card {
-    background: var(--bg-card);
-    border-radius: var(--radius-xl);
-    padding: 32px;
-    position: relative;
-    transition: all 0.4s var(--ease-spring);
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    border: 1px solid transparent;
-    /* Prepare for border transition */
-}
-
-.card:hover {
-    background: var(--bg-card-hover);
-    transform: translateY(-8px) scale(1.01);
-    box-shadow: var(--shadow-hover);
-    border-color: var(--border-subtle);
-}
-
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 20px;
-}
-
-.tag {
-    font-size: 12px;
     font-weight: 600;
-    padding: 6px 14px;
-    border-radius: var(--radius-md);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.card-actions {
     display: flex;
+    align-items: center;
     gap: 8px;
-    opacity: 0;
-    transform: translateX(10px);
-    transition: all 0.2s ease;
-}
-
-.card:hover .card-actions {
+    color: var(--text-primary);
+    white-space: nowrap;
     opacity: 1;
-    transform: translateX(0);
+    transition: opacity 0.2s;
+    cursor: pointer;
+    /* Clickable logo to expand? */
 }
 
+/* When collapsed, brand fades out */
+.sidebar.collapsed .brand {
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    /* Take out of flow */
+}
+
+/* Toggle Buttons */
 .icon-btn {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 6px;
     color: var(--text-secondary);
-    background: rgba(0, 0, 0, 0.05);
+    background: transparent;
     transition: all 0.2s;
+    flex-shrink: 0;
+    cursor: pointer;
 }
 
 .icon-btn:hover {
-    background: var(--text-primary);
-    color: white;
-}
-
-.icon-btn.delete:hover {
-    background: #ea4335;
-    /* Google Red */
-    color: white;
-}
-
-.card-title {
-    font-size: 24px;
-    font-weight: 500;
-    margin-bottom: 12px;
+    background: rgba(0, 0, 0, 0.05);
     color: var(--text-primary);
 }
 
-.card-desc {
-    font-size: 16px;
-    color: var(--text-secondary);
-    line-height: 1.6;
-    flex-grow: 1;
-    /* Pushes footer down */
-    margin-bottom: 24px;
+/* Toggle Logic:
+   - Open: Toggle is on the RIGHT.
+   - Closed: Toggle is CENTERED (It replaces the logo effectively or stays in header).
+   Wait, ChatGPT puts the toggle (sidebar icon) on top-left of the main content when collapsed.
+   Here we keep it in the sidebar. Let's Center it.
+*/
+
+.desktop-only {
+    display: flex;
 }
 
-.card-footer {
-    margin-top: auto;
+.mobile-only {
+    display: none;
 }
 
-.visit-link {
-    display: inline-flex;
-    align-items: center;
+/* Hide mobile close button on desktop always */
+
+/* Centering in Collapsed State */
+.sidebar.collapsed .sidebar-header {
     justify-content: center;
-    gap: 8px;
+    padding: 0;
+}
+
+.sidebar.collapsed .desktop-only {
+    margin: 0;
+}
+
+/* Main Content Wrapper (Sidebar List) */
+.sidebar-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    /* Tighter list */
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0 8px;
+    transition: padding 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.sidebar-content::-webkit-scrollbar {
+    display: none;
+}
+
+.sidebar.collapsed .sidebar-content {
+    padding: 0 12px;
+    align-items: center;
+}
+
+/* Search */
+.search-container {
+    margin-bottom: 12px;
+    width: 100%;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+
+    /* Box Styles */
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+
+    /* Layout */
+    padding: 0 12px;
+    /* Fixed padding */
+
+    /* Transition */
+    transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+    overflow: hidden;
+    cursor: text;
+}
+
+/* Collapsed State: Turn into Icon Button */
+.sidebar.collapsed .search-container {
+    width: 44px;
+    /* Icon width + padding */
+    min-width: 44px;
+    height: 44px;
+    min-height: 44px;
+    padding: 0 0 0 12px;
+    /* Keep icon aligned with list */
+
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+
+    pointer-events: auto;
+    cursor: pointer;
+    margin-bottom: 0;
+}
+
+.sidebar.collapsed .search-container:hover {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+}
+
+/* The Icon */
+.search-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+    transition: color 0.2s;
+}
+
+/* The Input */
+.search-input {
+    flex-grow: 1;
+    width: 100%;
+    border: none;
+    background: transparent;
+    padding: 0 0 0 8px;
+    font-size: 13px;
     font-weight: 500;
     color: var(--text-primary);
-    border: 1px solid var(--border-hover);
-    border-radius: var(--radius-pill);
-    padding: 12px 24px;
-    width: 100%;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    text-decoration: none;
-}
-
-.visit-link:hover {
-    background: var(--text-primary);
-    color: white;
-    border-color: var(--text-primary);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    outline: none;
+    box-shadow: none;
     opacity: 1;
-    text-decoration: none;
+    transition: all 0.2s;
+    height: 100%;
 }
 
-/* Modal */
-.modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(8px);
-    z-index: 1000;
+.search-container:focus-within {
+    border-color: var(--text-primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.search-input::placeholder {
+    color: var(--text-tertiary);
+}
+
+/* Collapsed Input */
+.sidebar.collapsed .search-input {
+    width: 0;
+    padding: 0;
+    opacity: 0;
+}
+
+.search-input:focus {
+    border-color: var(--text-primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    outline: none;
+}
+
+/* Logo - Ensure full visibility */
+.logo {
+    display: block;
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    flex-shrink: 0;
+    overflow: visible;
+    /* Ensure viewbox expansion works */
+}
+
+/* Sidebar List */
+.sidebar-list-header {
+    display: none;
+}
+
+/* Tool Item */
+.sidebar-tool-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    /* FIXED padding for stability */
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: var(--text-secondary);
+    gap: 12px;
+    height: 44px;
+    text-decoration: none;
+    margin: 0;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.sidebar.collapsed .sidebar-tool-item {
+    /* REMOVED centering and zero padding. Kept fixed. */
+    padding: 8px 12px;
+    width: 100%;
+    height: 44px;
+    margin-bottom: 8px;
+}
+
+.sidebar-tool-item:hover {
+    background: white;
+    color: var(--text-primary);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+}
+
+.sidebar-tool-item img {
+    width: 20px;
+    /* Smaller icons */
+    height: 20px;
+    border-radius: 5px;
+    object-fit: cover;
+    flex-shrink: 0;
+    /* Removed Grayscale as requested */
+    /* filter: grayscale(100%);  */
+    /* opacity: 0.7; */
+    transition: all 0.2s;
+}
+
+.sidebar-tool-item:hover img {
+    /* filter: none; */
+    /* opacity: 1; */
+    transform: scale(1.1);
+}
+
+/* Text Container for Smooth Hide */
+.sidebar-tool-info {
+    flex-grow: 1;
+    white-space: nowrap;
+    opacity: 1;
+    transition: opacity 0.2s, width 0.2s;
+    /* Smooth text fade */
+}
+
+.sidebar.collapsed .sidebar-tool-info {
+    opacity: 0;
+    width: 0;
+    pointer-events: none;
+}
+
+.sidebar-tool-name {
+    font-size: 13px;
+    /* Smaller text */
+    font-weight: 500;
+}
+
+/* Actions */
+.sidebar-actions {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+    /* Increased gap as requested */
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.sidebar.collapsed .sidebar-actions {
+    display: none;
+    /* Hide actions in collapsed mode */
+}
+
+.sidebar-tool-item:hover .sidebar-actions {
+    opacity: 1;
+}
+
+.mini-btn {
+    padding: 4px;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-secondary);
+    transition: all 0.2s;
+}
+
+.mini-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text-primary);
+}
+
+/* Red Delete Button */
+.mini-btn.delete:hover {
+    color: #ef4444;
+    /* Tailwind Red-500 */
+    background: rgba(239, 68, 68, 0.1);
+}
+
+/* Footer (Submit) */
+.sidebar-footer {
+    padding: 16px 8px;
+    border-top: none;
+}
+
+/* Button Primary */
+.btn-primary {
+    background: var(--text-primary);
+    /* Black button like Apple/Vercel */
+    color: white;
+    padding: 14px 24px;
+    border-radius: 16px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 8px;
+}
+
+.btn-primary:hover {
+    background: #000;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Collapsed Footer */
+/* Collapsed Footer */
+.sidebar.collapsed .btn-primary {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    padding: 0;
+    /* Removed margin: 0 auto; handled by sidebar-footer */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebar.collapsed .sidebar-footer {
+    display: flex;
+    justify-content: center;
+}
+
+.sidebar.collapsed .btn-primary span {
+    display: none;
+}
+
+.sidebar.collapsed .btn-primary::after {
+    content: '+';
+    font-size: 24px;
+    line-height: 1;
+    transform: translateY(-2px) translateX(0.5px);
+    /* Optical Center */
+}
+
+/* Tool Link Wrapper - Ensure it fills space */
+.tool-link-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    /* Allow stacking */
+    margin-bottom: 8px;
+    /* Space between icon and text */
+}
+
+/* --- Content Area --- */
+.main-content {
+    flex-grow: 1;
+    padding: 60px 80px;
+    height: 100vh;
+    overflow-y: auto;
+    background: #F8F9FA;
+    /* Nuance difference from sidebar */
+}
+
+/* Hero */
+.hero.compact {
+    text-align: left;
+    margin-bottom: 50px;
+    padding: 0;
+}
+
+.hero.compact h1 {
+    font-size: 48px;
+    font-weight: 800;
+    /* Bolder */
+    letter-spacing: -0.03em;
+    margin-bottom: 12px;
+    color: var(--text-primary);
+    line-height: 1.1;
+}
+
+.hero.compact p {
+    font-size: 20px;
+    color: var(--text-secondary);
+    font-weight: 400;
+    max-width: 600px;
+    line-height: 1.5;
+}
+
+/* Sections */
+.category-section {
+    background: transparent;
+    /* Remove white card bg for sections, cleaner look */
+    border-radius: 0;
+    padding: 0;
+    margin-bottom: 50px;
+    box-shadow: none;
+    border: none;
+}
+
+.category-section:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.category-title {
+    display: none;
+    /* Hidden as requested */
+    /* Original styles preserved below if toggled back
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding-left: 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding-bottom: 12px;
+    */
+}
+
+/* Grid */
+.icon-grid {
+    display: grid;
+    /* Card width approx 140px-160px for Stitch look */
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 24px;
+    /* Stitch gap-6 */
+    justify-items: stretch;
+    /* Cards fill cell */
+}
+
+/* Sticker/Card Item */
+.tool-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    cursor: pointer;
+
+    /* Stitch Card Style */
+    background: var(--bg-card);
+    /* White */
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    /* 16px */
+    padding: 24px;
+    box-shadow: var(--shadow-card);
+    transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+
+    /* Ensure aspect ratio if needed, or just let content dictate */
+    aspect-ratio: 1/1;
+}
+
+.tool-item:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+    border-color: rgba(0, 0, 0, 0.05);
+}
+
+.tool-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 14px;
+    /* Slightly less than card */
+    object-fit: cover;
+    margin-bottom: 12px;
+    /* Space for text */
+    /* Remove individual icon shadow, card has it */
+    box-shadow: none;
+}
+
+.tool-item:hover .tool-icon {
+    transform: scale(1.05);
+    /* Subtle zoom */
+}
+
+/* Tool Name - Visible Card Title */
+.tool-name-tooltip {
+    position: static;
+    /* Flow normally */
+    transform: none;
+    background: transparent;
+    color: var(--text-primary);
+    padding: 0;
+    border-radius: 0;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    opacity: 1;
+    /* Always visible */
+    pointer-events: auto;
+    box-shadow: none;
+    max-width: 100%;
+    text-align: center;
+}
+
+.tool-item:hover .tool-name-tooltip {
+    transform: none;
+    opacity: 1;
+}
+
+
+/* --- MODAL RESTORATION & STYLE --- */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 2000;
+    /* Higher than sidebar */
+    /* Changed from flex/opacity to display: none for safety */
+    display: none;
+    align-items: center;
+    justify-content: center;
     opacity: 0;
-    pointer-events: none;
     transition: opacity 0.3s;
+    /* 
+       User wants "navigation bar un peu plus vers la droite" & "overlay clean".
+       I'm adding extra left padding to visually offset the modal from the sidebar,
+       even though the overlay covers it. This centers the modal in the "remaining" space.
+    */
+    padding: 60px 60px 60px 140px;
 }
 
 .modal-overlay.open {
+    display: flex;
     opacity: 1;
     pointer-events: auto;
 }
 
 .modal {
-    background: white;
+    background: #ffffff;
+    /* Solid white for better contrast with inputs */
     width: 100%;
     max-width: 540px;
-    border-radius: var(--radius-xl);
-    padding: 40px;
-    box-shadow: var(--shadow-modal);
-    transform: translateY(40px) scale(0.95);
-    transition: transform 0.4s var(--ease-spring);
+    /* Slightly wider */
+    max-height: 100%;
+    /* Ensure it fits within padding */
+    border-radius: 24px;
+    padding: 32px 32px 32px 28px;
+    /* Slightly less left padding to balance scrollbar */
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    transform: scale(0.95) translateY(10px);
+    transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    overflow-y: auto;
+    /* Scroll if content is too tall */
+
+    /* Custom Scrollbar for "Clean Overlay" */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+/* Webkit Scrollbar */
+.modal::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 20px 0;
+}
+
+.modal::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+}
+
+.modal::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.2);
 }
 
 .modal-overlay.open .modal {
-    transform: translateY(0) scale(1);
+    transform: scale(1) translateY(0);
 }
 
 .modal-header h2 {
-    font-size: 28px;
-    margin-bottom: 8px;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    text-transform: capitalize;
+    color: var(--text-primary);
 }
 
 .form-field {
@@ -398,27 +750,43 @@ header {
 
 .form-field label {
     display: block;
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 12px;
+    font-weight: 700;
     margin-bottom: 8px;
     color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .form-field input,
 .form-field textarea,
 .form-field select {
     width: 100%;
-    padding: 16px;
+    padding: 14px 16px;
     border-radius: 12px;
-    border: 1px solid var(--border-hover);
-    background: #f8f9fa;
-    font-size: 16px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: #FAFAFA;
+    /* Light grey bg */
+    font-size: 15px;
     font-family: inherit;
     transition: all 0.2s;
+    color: var(--text-primary);
+    appearance: none;
+    /* Remove default arrow for Select */
+}
+
+/* Custom Select Arrow */
+.form-field select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235f6368' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    background-size: 16px;
+    cursor: pointer;
 }
 
 .form-field input:focus,
-.form-field textarea:focus {
+.form-field textarea:focus,
+.form-field select:focus {
     background: white;
     border-color: var(--text-primary);
     outline: none;
@@ -428,55 +796,58 @@ header {
 .modal-footer {
     display: flex;
     justify-content: flex-end;
-    gap: 16px;
+    gap: 12px;
     margin-top: 32px;
 }
 
-/* Animations */
-@keyframes fadeIn {
-    to {
-        opacity: 1;
-    }
+/* Chip/Button Secondary */
+.chip {
+    padding: 10px 20px;
+    border-radius: var(--radius-md);
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text-primary);
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.chip:hover {
+    background: rgba(0, 0, 0, 0.1);
 }
 
 /* Responsive */
-@media (max-width: 768px) {
-    .hero h1 {
-        font-size: 40px;
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 100%;
+        /* Drawer */
+        max-width: 300px;
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        transform: translateX(-100%);
+        border-right: none;
+        box-shadow: none;
     }
 
-    .grid {
-        grid-template-columns: 1fr;
+    .sidebar.open {
+        transform: translateX(0);
+        box-shadow: 0 0 50px rgba(0, 0, 0, 0.2);
     }
 
-    .app-container {
+    .main-content {
         padding: 20px;
     }
-}
 
-.form-field select {
-    padding-right: 48px;
-    /* More space for the arrow */
-    cursor: pointer;
-}
+    .desktop-only {
+        display: none;
+    }
 
-/* Card Identity (Logo + Title) */
-.card-identity {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 12px;
-}
+    .mobile-only {
+        display: flex;
+    }
 
-.tool-logo {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    background: #f1f3f4;
-    object-fit: cover;
-}
-
-.card-title {
-    margin-bottom: 0;
-    /* Reset margin since it's in flex container */
+    .mobile-header {
+        display: flex;
+    }
 }

@@ -1,101 +1,386 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Atlas - AI & Dev Tools</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Inter:wght@400;500;600&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="src/styles.css">
-    <link rel="icon" type="image/png" href="favicon.png?v=5">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Dashboard de Théo</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#6366f1",
+                        "background-light": "#f8fafc", // Gray-50ish
+                        "background-dark": "#0f172a",
+                        "card-light": "#ffffff",
+                        "card-dark": "#1e293b",
+                    },
+                    fontFamily: {
+                        display: ["Plus Jakarta Sans", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "16px",
+                        'xl': '16px',
+                        '2xl': '24px',
+                        '3xl': '32px'
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .glass-card {
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .sidebar-text {
+            transition: opacity 0.2s;
+        }
+
+        .scroll-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Gemini Gradient Animation */
+        .gemini-gradient {
+            background: linear-gradient(135deg, #1e40af 0%, #7e22ce 25%, #dc2626 50%, #ea580c 75%, #15803d 100%);
+            background-size: 200% 200%;
+            animation: gradientMove 15s ease infinite;
+        }
+
+        @keyframes gradientMove {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Hero App Hover Effect - Simple Shadow */
+        .hero-app-icon {
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .hero-app-icon:hover {
+            transform: scale(1.08);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Notification Animations */
+        @keyframes slideInUp {
+            0% {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutDown {
+            0% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+        }
+
+        /* Prevent app selection */
+        .draggable-app {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+    </style>
 </head>
 
-<body>
-
-    <div class="app-container">
-        <header>
-            <div class="brand">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" class="logo">
-                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" />
-                    <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" />
-                    <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" />
-                </svg>
-                ATLAS
+<body class="bg-gray-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors duration-300">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar (Left) -->
+        <aside
+            class="w-20 lg:w-64 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col p-4 lg:p-6 transition-all duration-300 z-20">
+            <!-- Header: Logo -->
+            <div class="flex items-center gap-3 mb-10 px-2 cursor-pointer" onclick="location.reload()">
+                <div class="w-10 h-10 flex items-center justify-center">
+                    <img src="SVG Favicon.svg" alt="ATLAS" class="w-full h-full object-contain">
+                </div>
+                <span
+                    class="text-xl font-bold tracking-tight hidden lg:block text-slate-800 dark:text-white">ATLAS</span>
             </div>
-            <button id="add-tool-btn" class="btn-primary">Submit Tool</button>
-        </header>
 
-        <div class="hero">
-            <h1>The definitive collection<br>of AI & Dev tools.</h1>
-            <p>A curated directory of the most powerful resources designed to accelerate your workflow.</p>
+            <!-- Navigation with Data Filters (Scrollable) -->
+            <nav class="flex-1 w-full overflow-y-auto scroll-hide space-y-2 max-h-[calc(100vh-400px)]">
+                <!-- Accueil (All) -->
+                <a href="#" data-filter="all"
+                    class="sidebar-link flex items-center gap-4 p-3 rounded-2xl bg-indigo-600 text-white shadow-md shadow-indigo-500/20 transition-all group">
+                    <i data-lucide="home" class="w-5 h-5"></i>
+                    <span class="font-medium hidden lg:block">Accueil</span>
+                </a>
 
-            <div class="action-bar justify-center">
-                <!-- Categories -->
-                <div id="category-scroller" class="categories">
-                    <!-- Injected via JS -->
+                <!-- Admin -->
+                <a href="#" data-filter="SaaS & Productivité"
+                    class="sidebar-link flex items-center gap-4 p-3 rounded-2xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all group">
+                    <i data-lucide="briefcase"
+                        class="w-5 h-5 group-hover:text-slate-900 dark:group-hover:text-white transition-colors"></i>
+                    <span
+                        class="font-medium hidden lg:block group-hover:text-slate-900 dark:group-hover:text-white transition-colors">Admin</span>
+                </a>
+
+                <!-- Divertissement -->
+                <a href="#" data-filter="Divertissement"
+                    class="sidebar-link flex items-center gap-4 p-3 rounded-2xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all group">
+                    <i data-lucide="gamepad-2"
+                        class="w-5 h-5 group-hover:text-slate-900 dark:group-hover:text-white transition-colors"></i>
+                    <span
+                        class="font-medium hidden lg:block group-hover:text-slate-900 dark:group-hover:text-white transition-colors">Divertissement</span>
+                </a>
+
+                <!-- Dev / Tools -->
+                <a href="#" data-filter="Development"
+                    class="sidebar-link flex items-center gap-4 p-3 rounded-2xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all group">
+                    <i data-lucide="code-2"
+                        class="w-5 h-5 group-hover:text-slate-900 dark:group-hover:text-white transition-colors"></i>
+                    <span
+                        class="font-medium hidden lg:block group-hover:text-slate-900 dark:group-hover:text-white transition-colors">Dev
+                        / Tools</span>
+                </a>
+
+                <!-- Google -->
+                <a href="#" data-filter="Google"
+                    class="sidebar-link flex items-center gap-4 p-3 rounded-2xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all group">
+                    <i data-lucide="globe"
+                        class="w-5 h-5 group-hover:text-slate-900 dark:group-hover:text-white transition-colors"></i>
+                    <span
+                        class="font-medium hidden lg:block group-hover:text-slate-900 dark:group-hover:text-white transition-colors">Google</span>
+                </a>
+
+                <!-- Design -->
+                <a href="#" data-filter="Design"
+                    class="sidebar-link flex items-center gap-4 p-3 rounded-2xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all group">
+                    <i data-lucide="palette"
+                        class="w-5 h-5 group-hover:text-slate-900 dark:group-hover:text-white transition-colors"></i>
+                    <span
+                        class="font-medium hidden lg:block group-hover:text-slate-900 dark:group-hover:text-white transition-colors">Design</span>
+                </a>
+
+                <!-- AI -->
+                <a href="#" data-filter="Intelligence Artificielle"
+                    class="sidebar-link flex items-center gap-4 p-3 rounded-2xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all group">
+                    <i data-lucide="brain"
+                        class="w-5 h-5 group-hover:text-slate-900 dark:group-hover:text-white transition-colors"></i>
+                    <span
+                        class="font-medium hidden lg:block group-hover:text-slate-900 dark:group-hover:text-white transition-colors">AI</span>
+                </a>
+            </nav>
+
+            <!-- Sidebar App List (Scrollable) -->
+            <div class="flex-1 overflow-y-auto mt-6 mb-4 space-y-1 scroll-hide px-1">
+
+                <!-- Favorites Section -->
+                <div class="mb-6">
+                    <h3
+                        class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2 px-2 flex items-center justify-between">
+                        Favoris
+                        <i data-lucide="star" class="w-3 h-3"></i>
+                    </h3>
+                    <div id="sidebar-favorites-list"
+                        class="space-y-1 min-h-[40px] border-2 border-dashed border-transparent rounded-xl transition-all"
+                        data-drop-zone="favorites">
+                        <!-- Favorites injected via JS -->
+                        <div class="text-xs text-slate-400 text-center py-2 italic placeholder">Glissez ici vos favoris
+                        </div>
+                    </div>
+                </div>
+
+                <!-- All Apps Section -->
+                <div>
+                    <h3 class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2 px-2">
+                        Toutes les apps</h3>
+                    <div id="sidebar-app-list" class="space-y-1 min-h-[40px]" data-drop-zone="all">
+                        <!-- App List Items injected via JS -->
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <main id="tools-grid" class="grid">
-            <!-- Cards Injected via JS -->
+            <!-- Sidebar Footer: Add App Button -->
+            <div class="w-full pt-4 border-t border-slate-200 dark:border-slate-800 mt-auto">
+                <button id="add-app-sidebar-btn"
+                    class="w-full p-3 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 text-slate-500 hover:text-indigo-600 hover:border-indigo-500 transition-all flex items-center justify-center gap-2 group">
+                    <i data-lucide="plus" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                    <span class="font-medium hidden lg:block">Ajouter une app</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content (Right) -->
+        <main class="flex-1 overflow-y-auto p-6 lg:p-10 bg-gray-50/50 dark:bg-slate-900">
+            <!-- Simple Header -->
+            <header class="mb-8">
+                <h1 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Dashboard de Théo</h1>
+                <p class="text-slate-500 dark:text-slate-400 font-medium">Bienvenue sur ton espace personnel</p>
+            </header>
+
+            <!-- Grid Layout -->
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 items-stretch">
+
+                <!-- A. Hero Card (Gemini Style Gradient) -->
+                <div
+                    class="col-span-1 lg:col-span-3 rounded-[32px] gemini-gradient p-10 text-white relative overflow-hidden shadow-xl shadow-indigo-900/10 flex flex-col justify-between h-full transition-all">
+
+                    <!-- Search Bar (Top) -->
+                    <div class="relative z-10 w-full mb-8">
+                        <form action="https://www.google.com/search" method="GET" target="_blank"
+                            class="w-full relative group">
+                            <div
+                                class="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-purple-600 transition-colors z-20">
+                                <i data-lucide="search" class="w-6 h-6"></i>
+                            </div>
+                            <input type="text" name="q"
+                                class="w-full pl-16 pr-20 py-5 rounded-[24px] bg-white text-slate-800 placeholder-slate-400 text-lg font-medium shadow-2xl shadow-black/20 focus:ring-4 focus:ring-white/30 border-none outline-none transition-all"
+                                placeholder="Recherche Google..." autocomplete="off">
+
+                            <!-- Gemini Icon (Right) -->
+                            <a href="https://gemini.google.com" target="_blank"
+                                class="absolute right-4 top-1/2 -translate-y-1/2 p-2 hover:scale-110 transition-transform z-20 group/gemini"
+                                title="Ouvrir Gemini">
+                                <img src="https://www.gstatic.com/lamda/images/gemini_sparkle_v002_d4735304ff6292a690345.svg"
+                                    alt="Gemini"
+                                    class="w-7 h-7 opacity-70 group-hover/gemini:opacity-100 transition-opacity">
+                            </a>
+                        </form>
+                    </div>
+
+                    <!-- Bottom Apps (Dynamic Hero Favorites) -->
+                    <div id="hero-apps-container"
+                        class="relative z-10 grid grid-cols-3 gap-6 max-w-4xl mx-auto w-full min-h-[140px]">
+                        <!-- Injected via JS -->
+                    </div>
+                </div>
+
+                <!-- B. Right Column: Read Later -->
+                <div
+                    class="col-span-1 lg:col-span-1 bg-white dark:bg-card-dark rounded-[32px] p-6 shadow-sm border border-slate-100 dark:border-slate-800 flex flex-col h-full">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="font-bold text-lg text-slate-800 dark:text-white">À lire plus tard</h3>
+                        <div class="p-2 bg-slate-100 dark:bg-slate-800 rounded-lg text-slate-500">
+                            <i data-lucide="bookmark" class="w-4 h-4"></i>
+                        </div>
+                    </div>
+
+                    <!-- List Container (Max 3 items visible, then scrollable) -->
+                    <div id="read-later-list" class="space-y-3 flex-1 overflow-y-auto scroll-hide max-h-[280px]">
+                        <!-- Items injected via JS -->
+                    </div>
+
+                    <!-- Add Button -->
+                    <button id="add-read-later-btn"
+                        class="w-full mt-4 py-3 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl text-slate-500 dark:text-slate-400 font-medium hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all flex items-center justify-center gap-2">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                        Ajouter un lien
+                    </button>
+                </div>
+
+                <!-- C. Dynamic All Apps Container -->
+                <div id="all-apps-container" class="col-span-1 lg:col-span-4 space-y-8 mt-4">
+                    <!-- Categories will be injected here via JS -->
+                </div>
+
+            </div>
         </main>
     </div>
 
-    <!-- Modal -->
-    <div id="modal-overlay" class="modal-overlay">
-        <div class="modal">
-            <div class="modal-header">
-                <h2 id="modal-title">submit a tool</h2>
+    <!-- Modal: Add App -->
+    <div id="add-app-modal"
+        class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center z-50 opacity-0 transition-opacity duration-300">
+        <div class="bg-white dark:bg-slate-900 rounded-[24px] p-8 w-full max-w-md shadow-2xl transform scale-95 transition-transform duration-300"
+            id="modal-content">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white">Ajouter une application</h3>
+                <button id="close-modal-btn"
+                    class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors">
+                    <i data-lucide="x" class="w-5 h-5 text-slate-500"></i>
+                </button>
             </div>
-            <form id="tool-form">
-                <input type="hidden" id="tool-id" name="id"> <!-- Hidden ID for edits -->
 
-                <div class="form-field">
-                    <label>Name</label>
-                    <input type="text" name="title" id="inp-title" required placeholder="e.g. Vercel">
+            <form id="add-app-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nom</label>
+                    <input type="text" id="app-name"
+                        class="w-full rounded-xl border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-3 focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                        placeholder="Ex: My New App" required>
                 </div>
-
-                <div class="form-field">
-                    <label>Category</label>
-                    <select name="category" id="inp-category" required>
-                        <!-- Injected -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">URL (ex:
+                        https://example.com)</label>
+                    <input type="url" id="app-url"
+                        class="w-full rounded-xl border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-3 focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                        placeholder="https://..." required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Icône (Coller une
+                        image ici)</label>
+                    <div id="paste-area"
+                        class="w-full h-24 rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 cursor-pointer hover:border-indigo-500 hover:text-indigo-500 transition-all relative overflow-hidden"
+                        tabindex="0">
+                        <span class="text-xs text-center pointer-events-none">Cliquez et faites CTRL+V<br>pour coller
+                            une image</span>
+                        <img id="paste-preview"
+                            class="absolute inset-0 w-full h-full object-contain hidden bg-white dark:bg-slate-800 p-2">
+                    </div>
+                    <input type="hidden" id="app-icon-url">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Catégorie</label>
+                    <select id="app-category"
+                        class="w-full rounded-xl border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-3 focus:ring-2 focus:ring-indigo-500 outline-none transition-all">
+                        <option value="SaaS & Productivité">Admin - SaaS & Productivité</option>
+                        <option value="Divertissement">Divertissement - Films, Musique & Gaming</option>
+                        <option value="Development">Dev/Tools - Outils de développement</option>
+                        <option value="SaaS & Productivité">Google - Services Google</option>
+                        <option value="Design">Design - Créativité & UI/UX</option>
+                        <option value="Intelligence Artificielle">AI - Intelligence Artificielle</option>
                     </select>
                 </div>
 
-                <div class="form-field">
-                    <label>Website URL</label>
-                    <input type="url" name="url" id="inp-url" required placeholder="https://...">
-                </div>
-
-                <div class="form-field">
-                    <label>Logo Image URL (Optional)</label>
-                    <input type="url" name="logo_url" id="inp-logo"
-                        placeholder="https://link-to-image.png (Overrides favicon)">
-                </div>
-
-                <div class="form-field">
-                    <label>Description</label>
-                    <textarea name="description" id="inp-desc" rows="3" required
-                        placeholder="What does it do?"></textarea>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" id="close-modal-btn" class="chip">Cancel</button>
-                    <button type="submit" class="btn-primary">Save Tool</button>
-                </div>
+                <button type="submit"
+                    class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-indigo-500/30 mt-4">
+                    Ajouter au Dashboard
+                </button>
             </form>
         </div>
     </div>
 
+    <!-- Initialize Lucide Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+
+    <!-- Main JS -->
     <script src="src/main.js"></script>
 </body>
 
