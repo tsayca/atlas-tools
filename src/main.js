@@ -285,23 +285,23 @@
             return `
                 <div class="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-3xl p-8 bg-white/50 dark:bg-slate-800/30 backdrop-blur-sm transition-all hover:border-indigo-300 dark:hover:border-indigo-700">
                     <!-- Block Header -->
-                    <div class="flex items-center gap-3 mb-6">
+                    <div class="flex items-center gap-3 mb-8">
                         <div class="p-3 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl shadow-lg">
                             <i data-lucide="${mega.icon}" class="w-6 h-6 text-white"></i>
                         </div>
                         <div>
-                            <h2 class="text-2xl font-bold text-slate-900 dark:text-white">${mega.title}</h2>
+                            <h2 class="text-3xl font-bold text-slate-900 dark:text-white">${mega.title}</h2>
                             <p class="text-sm text-slate-500 dark:text-slate-400">${mega.subtitle}</p>
                         </div>
                     </div>
 
                     <!-- Apps Grid -->
-                <div class="grid grid-cols-3 gap-4 category-drop-zone" data-category="${mega.name}">
+                <div class="grid grid-cols-2 lg:grid-cols-3 gap-6 category-drop-zone" data-category="${mega.name}">
                     ${appsInMega.map(app => `
                         <div class="group flex flex-col items-center gap-2 cursor-pointer draggable-app" 
                              data-app-id="${app.id}" 
                              data-category="${mega.name}">
-                            <a href="${app.url}" target="_blank" class="relative aspect-square rounded-2xl bg-white dark:bg-card-dark border border-slate-100 dark:border-slate-800 hover:shadow-xl transition-all w-full p-3 flex items-center justify-center pointer-events-none overflow-hidden" title="${app.title}">
+                            <a href="${app.url}" target="_blank" class="relative aspect-square rounded-2xl bg-white dark:bg-card-dark border border-slate-100 dark:border-slate-800 hover:shadow-xl transition-all w-full p-4 md:p-5 flex items-center justify-center pointer-events-none overflow-hidden" title="${app.title}">
                                 <img src="${getFavicon(app)}" alt="${app.title}" class="w-full h-full object-cover rounded-xl drop-shadow-sm">
                             </a>
                             
@@ -316,8 +316,8 @@
             `;
         }).join('');
 
-        // Wrap in horizontal grid container with 3 columns (2 rows for 6 categories)
-        elements.allAppsContainer.innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">${blocksHtml}</div>`;
+        // Wrap in horizontal grid container with 2 columns max (3 rows for 6 categories)
+        elements.allAppsContainer.innerHTML = `<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">${blocksHtml}</div>`;
 
         if (window.lucide) window.lucide.createIcons();
     }
@@ -708,6 +708,26 @@
         if (elements.modal) {
             elements.modal.addEventListener('click', (e) => {
                 if (e.target === elements.modal) closeModal();
+            });
+        }
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-toggle');
+        const sidebar = document.getElementById('sidebar');
+
+        if (mobileMenuBtn && sidebar) {
+            mobileMenuBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('-translate-x-full');
+            });
+
+            // Close sidebar when clicking outside on mobile
+            document.addEventListener('click', (e) => {
+                if (window.innerWidth < 1024 &&
+                    !sidebar.contains(e.target) &&
+                    !mobileMenuBtn.contains(e.target) &&
+                    !sidebar.classList.contains('-translate-x-full')) {
+                    sidebar.classList.add('-translate-x-full');
+                }
             });
         }
     }
